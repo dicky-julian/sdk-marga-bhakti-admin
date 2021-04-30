@@ -8,21 +8,18 @@
 * {
   font-family: "Lato", sans-serif;
   box-sizing: border-box;
-  transition: 0.2s;
+}
+
+a {
+  color: unset;
+  &:hover {
+    color: $col-primary;
+    text-decoration: unset;
+  }
 }
 
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  background-color: $col-light;
-}
-
-.bg {
-  &-fade {
-    background-color: $col-fade;
-  }
 }
 
 .text {
