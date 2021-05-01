@@ -34,15 +34,25 @@ const App = ({ Component, pageProps }) => {
       <div className="main">
         <Sidebar />
         <main className="main-section">
-          <div className="main-section-header">
-            <div className="main-section-breadcrumb text-secondary">
-              <div className="d-flex">
-                <Link href="/">
-                  <a>Halaman Admin</a>
-                </Link>
-                <span>/</span>
-                <a>Tata Letak</a>
-              </div>
+          <div className="main-header">
+            <div className="main-header-breadcrumb">
+              <Link href="/">
+                <a className="active">Halaman Admin</a>
+              </Link>
+              <span>/</span>
+              <span>Tata Letak</span>
+            </div>
+            <div className="main-header-tools">
+              <Link href="/">
+                <a>
+                  <i className="fas fa-cog"></i>
+                </a>
+              </Link>
+              <Link href="/">
+                <a>
+                  <i className="fas fa-user"></i>
+                </a>
+              </Link>
             </div>
           </div>
           <Component {...pageProps} />
