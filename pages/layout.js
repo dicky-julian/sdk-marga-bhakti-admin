@@ -38,15 +38,12 @@ const LayoutPage = () => {
           <div className="card-tools">
             <Link href="/">
               <a>
-                <i class="fas fa-link"></i> URL Tautan
+                <i className="fas fa-link"></i> URL Tautan
               </a>
             </Link>
             <div className="d-flex">
               <button className="btn-edit">
                 <i className="fas fa-pencil-alt"></i>
-              </button>
-              <button className="btn-delete">
-                <i className="fas fa-trash"></i>
               </button>
             </div>
           </div>
@@ -65,15 +62,12 @@ const LayoutPage = () => {
           <div className="card-tools">
             <Link href="/">
               <a>
-                <i class="fas fa-link"></i> URL Tautan
+                <i className="fas fa-link"></i> URL Tautan
               </a>
             </Link>
             <div className="d-flex">
               <button className="btn-edit">
                 <i className="fas fa-pencil-alt"></i>
-              </button>
-              <button className="btn-delete">
-                <i className="fas fa-trash"></i>
               </button>
             </div>
           </div>
@@ -92,15 +86,12 @@ const LayoutPage = () => {
           <div className="card-tools">
             <Link href="/">
               <a>
-                <i class="fas fa-link"></i> URL Tautan
+                <i className="fas fa-link"></i> URL Tautan
               </a>
             </Link>
             <div className="d-flex">
               <button className="btn-edit">
                 <i className="fas fa-pencil-alt"></i>
-              </button>
-              <button className="btn-delete">
-                <i className="fas fa-trash"></i>
               </button>
             </div>
           </div>

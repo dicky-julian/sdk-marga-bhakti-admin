@@ -4,7 +4,7 @@ import Router from "next/router";
 import { useState } from "react";
 import { Provider } from "react-redux";
 import { useStore } from "../services/store";
-import { Sidebar } from "../components/layouts";
+import { Sidebar, PageLoading } from "../components/layouts";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "../scss/main.scss";
 
@@ -43,12 +43,7 @@ const App = ({ Component, pageProps }) => {
               <span>Tata Letak</span>
             </div>
             <div className="main-header-tools">
-              <Link href="/">
-                <a>
-                  <i className="fas fa-cog"></i>
-                </a>
-              </Link>
-              <Link href="/">
+              <Link href="/profil">
                 <a>
                   <i className="fas fa-user"></i>
                 </a>
@@ -56,6 +51,7 @@ const App = ({ Component, pageProps }) => {
             </div>
           </div>
           <Component {...pageProps} />
+          {isLoading && <PageLoading />}
         </main>
       </div>
     </Provider>

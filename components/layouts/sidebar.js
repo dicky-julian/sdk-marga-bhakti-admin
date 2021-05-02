@@ -1,9 +1,13 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { Button } from "reactstrap";
 
 const faviconUrl =
   "https://yayasankarmel.or.id/wp-content/uploads/2019/03/yayasan-pendidikan-karmel-logo.png";
 
 const Sidebar = () => {
+  const { route } = useRouter();
+
   return (
     <nav className="sidebar">
       <div>
@@ -18,49 +22,73 @@ const Sidebar = () => {
         <span className="sidebar-divider" />
 
         <div className="sidebar-body">
-          <div className="sidebar-link active">
-            <div className="icon-bar mr-3">
-              <i className="fas fa-columns"></i>
+          <Link href="/layout">
+            <div
+              className={`sidebar-link ${route === "/layout" ? "active" : ""}`}
+            >
+              <div className="icon-bar mr-3">
+                <i className="fas fa-columns"></i>
+              </div>
+              <span className="link-bar">Tata Letak</span>
             </div>
-            <span className="link-bar">Tata Letak</span>
-          </div>
+          </Link>
 
-          <div className="sidebar-link">
-            <div className="icon-bar mr-3">
-              <i className="far fa-calendar"></i>
+          <Link href="/kegiatan">
+            <div
+              className={`sidebar-link ${
+                route === "/kegiatan" ? "active" : ""
+              }`}
+            >
+              <div className="icon-bar mr-3">
+                <i className="far fa-calendar"></i>
+              </div>
+              <span className="link-bar">Kegiatan</span>
             </div>
-            <span className="link-bar">Acara</span>
-          </div>
+          </Link>
 
-          <div className="sidebar-link">
-            <div className="icon-bar mr-3">
-              <i className="far fa-newspaper"></i>
+          <Link href="/artikel">
+            <div
+              className={`sidebar-link ${route === "/artikel" ? "active" : ""}`}
+            >
+              <div className="icon-bar mr-3">
+                <i className="far fa-newspaper"></i>
+              </div>
+              <span className="link-bar">Artikel</span>
             </div>
-            <span className="link-bar">Artikel</span>
-          </div>
+          </Link>
 
-          <div className="sidebar-link">
-            <div className="icon-bar mr-3">
-              <i className="far fa-file-alt"></i>
+          <Link href="/info">
+            <div
+              className={`sidebar-link ${route === "/info" ? "active" : ""}`}
+            >
+              <div className="icon-bar mr-3">
+                <i className="far fa-file-alt"></i>
+              </div>
+              <span className="link-bar">Info & Pengumuman</span>
             </div>
-            <span className="link-bar">Info & Pengumuman</span>
-          </div>
+          </Link>
 
-          <div className="sidebar-link">
+          <div className={`sidebar-link ${route === "/mapel" ? "active" : ""}`}>
             <div className="icon-bar mr-3">
               <i className="fas fa-journal-whills"></i>
             </div>
             <span className="link-bar">Mata Pelajaran</span>
           </div>
 
-          <div className="sidebar-link">
+          <div
+            className={`sidebar-link ${route === "/data-guru" ? "active" : ""}`}
+          >
             <div className="icon-bar mr-3">
               <i className="fas fa-users"></i>
             </div>
             <span className="link-bar">Data Guru</span>
           </div>
 
-          <div className="sidebar-link">
+          <div
+            className={`sidebar-link ${
+              route === "/data-siswa" ? "active" : ""
+            }`}
+          >
             <div className="icon-bar mr-3">
               <i className="fas fa-user-graduate"></i>
             </div>
