@@ -9,6 +9,11 @@ $col-primary: #d29f68;
   height: calc(100vh - 65px);
   position: sticky;
   top: 2rem;
+  background-color: #f8f9fa;
+  z-index: 99;
+  &-toggle {
+    display: none;
+  }
   &-header {
     display: flex;
     align-items: center;
@@ -26,7 +31,6 @@ $col-primary: #d29f68;
     width: calc(100% - 20px);
     position: relative;
     justify-self: flex-end;
-    margin-top: 20px;
     border-radius: 10px;
     background-image: linear-gradient(310deg, #ae99929c, #e2c99087),
       url(https://demos.creative-tim.com/soft-ui-dashboard/assets/img/curved-images/white-curved.jpeg);
@@ -106,6 +110,9 @@ $col-primary: #d29f68;
 // === MAIN BODY ===
 .main {
   display: flex;
+  &-line {
+    padding: 2rem;
+  }
   &-section {
     width: calc(100% - 275px);
     max-width: 1010px;
@@ -130,9 +137,15 @@ $col-primary: #d29f68;
     }
     &-tools {
       display: flex;
-      a {
+      a,
+      div {
         margin-left: 20px;
+        font-size: 14px;
         color: #67748e;
+        cursor: pointer;
+        &:hover {
+          color: $col-primary;
+        }
       }
     }
   }
@@ -340,8 +353,101 @@ $col-primary: #d29f68;
   }
 }
 
+// === LOGIN PAGE ===
+.login {
+  &-page {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("https://images.pexels.com/photos/1261728/pexels-photo-1261728.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    background-position: center;
+    background-size: cover;
+    &-form {
+      width: 400px;
+      max-width: 90%;
+      padding: 30px 20px 40px;
+      background-color: #fff;
+      box-shadow: 0 0.1rem 0.9rem -0.0625rem rgb(20 20 20 / 12%),
+        0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+      border-radius: 10px;
+      text-align: center;
+      h5 {
+        font-weight: bold;
+        background-image: linear-gradient(310deg, #ae9992, #e2ca90);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+    .admin-form-group {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px;
+      box-shadow: 0 0.1rem 0.9rem -0.0625rem rgb(20 20 20 / 12%),
+        0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+      border-radius: 7px;
+      margin-bottom: 1rem;
+      .icon-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        box-shadow: 0 0.25rem 0.375rem -0.0625rem rgb(20 20 20 / 12%),
+          0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+        border-radius: 5px;
+        font-size: 12px;
+        color: #000;
+      }
+      input {
+        height: 30px;
+        width: calc(100% - 40px);
+        border: none;
+        font-size: 13px;
+        &:focus {
+          border: none;
+          border-bottom: 1px solid #d2d6da;
+          outline-width: 0;
+        }
+        &::placeholder {
+          font-size: 13px;
+        }
+      }
+    }
+    .button {
+      height: 35px;
+      width: 100%;
+      background-image: linear-gradient(310deg, #ae9992, #e2ca90);
+      box-shadow: 0 0.1rem 0.9rem -0.0625rem rgb(20 20 20 / 12%),
+        0 0.125rem 0.25rem -0.0625rem rgb(20 20 20 / 7%);
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #fff;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 5px;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .rc-switch-checked {
+      background-color: rgb(89, 89, 89);
+      border-color: rgb(89, 89, 89);
+    }
+    img {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
 // === DATA TABLE ===
 .data-table {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
   border-radius: 10px;
@@ -355,6 +461,7 @@ $col-primary: #d29f68;
     }
   }
   &-body {
+    display: inline-block;
     overflow-x: auto;
     tr {
       vertical-align: middle;

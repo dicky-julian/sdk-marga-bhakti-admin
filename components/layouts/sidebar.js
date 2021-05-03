@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { Button } from "reactstrap";
 
 const faviconUrl =
@@ -7,9 +8,18 @@ const faviconUrl =
 
 const Sidebar = () => {
   const { route } = useRouter();
+  const [isNavToggle, setIsNavToggle] = useState(false);
 
   return (
-    <nav className="sidebar">
+    <nav className={`sidebar ${isNavToggle ? "active" : ""}`}>
+      <button
+        className={`sidebar-toggle ${isNavToggle ? "active" : ""}`}
+        onClick={() => setIsNavToggle(!isNavToggle)}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <div>
         <div className="sidebar-header">
           <img src={faviconUrl} width={35} />

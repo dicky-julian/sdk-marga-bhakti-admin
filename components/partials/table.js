@@ -5,37 +5,41 @@ const Table = (props) => {
       <div className="data-table-header">
         <h6>{title}</h6>
       </div>
-      <div className="data-table-body">
-        <tr>
-          <th>Judul</th>
-          <th>Deskripsi</th>
-          <th>Tempat</th>
-          <th>Pengunggah</th>
-          <th></th>
-        </tr>
-
-        {[1, 2, 3, 4, 5].map((data, index) => (
-          <tr key={index}>
-            <td>USA, International Triathlon Event</td>
-            <td>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque ...
-            </td>
-            <td>18/07/2002</td>
-            <td>Dicky Julian Pratama</td>
-            <td>
-              <div className="tab-action">
-                <button className="btn-edit">
-                  <i className="fas fa-pen"></i>
-                </button>
-                <button className="btn-delete ml-1">
-                  <i className="fas fa-trash"></i>
-                </button>
-              </div>
-            </td>
+      <table className="data-table-body">
+        <thead>
+          <tr>
+            <th>Judul</th>
+            <th>Deskripsi</th>
+            <th>Tempat</th>
+            <th>Pengunggah</th>
+            <th></th>
           </tr>
-        ))}
-      </div>
+        </thead>
+
+        <tbody>
+          {[1, 2, 3, 4, 5].map((parintis, index) => (
+            <tr key={index}>
+              <td>USA, International Triathlon Event</td>
+              <td style={{ minWidth: 225 }}>
+                Sed ut perspiciatis unde grid ombnis iste natus error sit
+                voluptatem accusantium doloremque ...
+              </td>
+              <td>18/07/2002</td>
+              <td>Dicky Julian Pratama</td>
+              <td>
+                <div className="tab-action">
+                  <button className="btn-edit">
+                    <i className="fas fa-pen"></i>
+                  </button>
+                  <button className="btn-delete ml-1">
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <div className="data-table-footer">
         <span>Menampilkan 1 dari 13 Halaman</span>

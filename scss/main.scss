@@ -2,7 +2,7 @@
 @import "bootstrap/dist/css/bootstrap.css";
 @import "./custom.scss";
 @import "./responsive.scss";
-
+$col-primary: #d29f68;
 * {
   font-family: "Open Sans", sans-serif;
   box-sizing: border-box;
@@ -14,7 +14,6 @@ html {
 
 body {
   background-color: #f8f9fa;
-  padding: 2rem;
 }
 
 a {
