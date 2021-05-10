@@ -7,10 +7,12 @@
         overflow-x: auto;
         margin-left: -1rem;
         padding: 0 1rem 15px;
+        flex-wrap: nowrap;
         .card-layout-header {
           min-width: 50%;
           width: unset;
           box-shadow: unset;
+          margin-bottom: 0;
           &:not(:first-child) {
             margin-left: 10px;
           }
@@ -32,15 +34,6 @@
     left: 0;
     padding: 2rem 0 2rem 1rem;
     width: 300px;
-  }
-  .main-section {
-    width: 100%;
-    margin-left: 0;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .sidebar {
     height: 100vh;
     left: -300px;
     transition: 0.2s;
@@ -98,6 +91,13 @@
       margin-top: 0.5rem i !important;
     }
   }
+  .main-section {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
   .main {
     min-height: 100vh;
     &-header-breadcrumb {

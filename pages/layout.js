@@ -1,167 +1,233 @@
 import Link from "next/link";
-import { Button } from "reactstrap";
-const bgHomeHeader1 =
-  "https://images.pexels.com/photos/5905881/pexels-photo-5905881.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-const bgHomeHeader2 =
-  "https://images.pexels.com/photos/3401403/pexels-photo-3401403.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-const bgHomeHeader3 =
-  "https://images.pexels.com/photos/5149627/pexels-photo-5149627.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Col,
+  Button,
+  Label,
+  Input,
+  Form,
+  FormGroup,
+  CustomInput,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+} from "reactstrap";
+import {
+  setDataAlertConfirm,
+  getDataLayout,
+  postDataLayoutHeader,
+} from "../redux/actions/layout";
+import { PageLoading } from "../components/layouts";
 
 const LayoutPage = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const { isLoadingLayout, dataLayout } = state.layout;
+
+  const [dataModalHeader, setDataModalHeader] = useState(null);
+  const [dataPayloadHeader, setDataPayloadHeader] = useState({});
+
+  // === CLOSE MODAL POST LAYOUT HEADER ===
+  const closeModalHeader = () => {
+    if (!isLoadingLayout) {
+      setDataModalHeader(null);
+      setDataPayloadHeader({});
+    }
+  };
+
+  // === OPEN MODAL POST LAYOUT HEADER ===
+  const openModalHeader = (action, label, sublabel = null) => {
+    // setDataModalHeader({
+    //   action,
+    //   label,
+    //   sublabel,
+    // });
+    dispatch(
+      setDataAlertConfirm({
+        type: "error",
+        title: "Apakah Anda yakin?",
+        description: "Semua data yang tidak tersimpan akan hilang!",
+        approveDisable: true,
+      })
+    );
+  };
+
+  // === HANDLE CHANGE MODAL POST LAYOUT HEADER ===
+  const handleChangeHeader = async (e) => {
+    const { name, value, files } = e.target;
+    const dataPayload = { ...dataPayloadHeader };
+
+    if (files) {
+      dataPayload[name] = files[0];
+    } else {
+      dataPayload[name] = value;
+    }
+
+    setDataPayloadHeader(dataPayload);
+  };
+
+  // === MODAL POST LAYOUT HEADER SUBMISSION ===
+  const handleSubmitHeader = async (e) => {
+    e.preventDefault();
+    await dispatch(
+      postDataLayoutHeader(
+        dataPayloadHeader,
+        dataModalHeader.label,
+        dataModalHeader.sublabel
+      )
+    );
+  };
+
+  useEffect(() => {
+    dispatch(getDataLayout());
+  }, []);
+
   return (
-    <div className="layout-page">
-      <div className="layout-page-title">
-        <div className="d-flex align-items-center">
-          <div className="icon-bar">
-            <i className="fas fa-home"></i>
-          </div>
-          <span>Header Beranda</span>
-        </div>
-        <div>
-          <button>
-            <i className="fas fa-plus mr-1"></i> Tambah
-          </button>
-        </div>
-      </div>
-
-      <div className="layout-header-home">
-        <div
-          className="card-layout-header"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.3)), url(${bgHomeHeader1})`,
-          }}
-        >
-          <div>
-            <div className="card-layout-header-index">1</div>
-            <h5>WE ENSURE BETTER EDUCATION FOR A BETTER WORLD</h5>
-          </div>
-          <div className="card-tools">
-            <Link href="/">
-              <a>
-                <i className="fas fa-link"></i> URL Tautan
-              </a>
-            </Link>
-            <div className="d-flex">
-              <button className="btn-edit">
-                <i className="fas fa-pencil-alt"></i>
+    <>
+      {dataLayout ? (
+        <div className="layout-page">
+          {/* === HEADER BERANDA === */}
+          <div className="layout-page-title">
+            <div className="d-flex align-items-center">
+              <div className="icon-bar">
+                <i className="fas fa-home"></i>
+              </div>
+              <span>Header Beranda</span>
+            </div>
+            <div>
+              <button
+                onClick={() =>
+                  openModalHeader("add", "home", dataLayout.header.home.length)
+                }
+              >
+                <i className="fas fa-plus mr-1"></i> Tambah
               </button>
             </div>
           </div>
-        </div>
-
-        <div
-          className="card-layout-header"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.3)), url(${bgHomeHeader2})`,
-          }}
-        >
-          <div>
-            <div className="card-layout-header-index">2</div>
-            <h5>THE ROOTS OF EDUCATION ARE BITTER, BUT THE FRUIT IS SWEET</h5>
+          <div className="layout-header-home">
+            {dataLayout.header.home.map((header, index) => (
+              <div
+                className="card-layout-header"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.3)), url(${header.image})`,
+                }}
+                key={index}
+              >
+                <div>
+                  <div className="card-layout-header-index">{index + 1}</div>
+                  <h5 className="text-uppercase">{header.title}</h5>
+                </div>
+                <div className="card-tools">
+                  <Link href={header.redirect_url}>
+                    <a>
+                      <i className="fas fa-link"></i> URL Tautan
+                    </a>
+                  </Link>
+                  <div className="d-flex">
+                    <button className="btn-edit">
+                      <i className="fas fa-pencil-alt"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="card-tools">
-            <Link href="/">
-              <a>
-                <i className="fas fa-link"></i> URL Tautan
-              </a>
-            </Link>
-            <div className="d-flex">
-              <button className="btn-edit">
-                <i className="fas fa-pencil-alt"></i>
-              </button>
+
+          {/* === HEADER SUB HALAMAN === */}
+          <div className="layout-page-title mt-5">
+            <div className="d-flex align-items-center">
+              <div className="icon-bar">
+                <i className="fas fa-ellipsis-h"></i>
+              </div>
+              <span>Header Sub Halaman</span>
             </div>
           </div>
-        </div>
 
-        <div
-          className="card-layout-header"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.3)), url(${bgHomeHeader3})`,
-          }}
-        >
-          <div>
-            <div className="card-layout-header-index">3</div>
-            <h5>THE GREAT AIM OF EDUCATION IS NOT KNOWLEDGE, BUT ACTION</h5>
-          </div>
-          <div className="card-tools">
-            <Link href="/">
-              <a>
-                <i className="fas fa-link"></i> URL Tautan
-              </a>
-            </Link>
-            <div className="d-flex">
-              <button className="btn-edit">
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-            </div>
+          <div className="layout-header-other">
+            {dataLayout.header.subpages.map((header, index) => (
+              <div
+                className="card-layout-header"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.3)), url(${header.image})`,
+                }}
+                key={index}
+              >
+                <div>
+                  <h5>{header.title}</h5>
+                </div>
+                <div className="card-tools justify-content-end">
+                  <div className="d-flex">
+                    <button className="btn-edit">
+                      <i className="fas fa-pencil-alt"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      ) : (
+        <PageLoading />
+      )}
 
-      <div className="layout-page-title mt-5">
-        <div className="d-flex align-items-center">
-          <div className="icon-bar">
-            <i className="fas fa-ellipsis-h"></i>
-          </div>
-          <span>Header Sub Halaman</span>
-        </div>
-      </div>
-      <div className="layout-header-other">
-        <div
-          className="card-layout-header"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.3)), url("https://images.pexels.com/photos/1164572/pexels-photo-1164572.jpeg")`,
-          }}
-        >
-          <div>
-            <h5>Kegiatan</h5>
-          </div>
-          <div className="card-tools justify-content-end">
-            <div className="d-flex">
-              <button className="btn-edit">
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="card-layout-header"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.3)), url("https://images.pexels.com/photos/2097/desk-office-pen-ruler.jpg")`,
-          }}
-        >
-          <div>
-            <h5>Artikel</h5>
-          </div>
-          <div className="card-tools justify-content-end">
-            <div className="d-flex">
-              <button className="btn-edit">
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="card-layout-header"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.3)), url("https://images.pexels.com/photos/4474032/pexels-photo-4474032.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")`,
-          }}
-        >
-          <div>
-            <h5>Prestasi</h5>
-          </div>
-          <div className="card-tools justify-content-end">
-            <div className="d-flex">
-              <button className="btn-edit">
-                <i className="fas fa-pencil-alt"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Modal isOpen={Boolean(dataModalHeader)} size="md">
+        <Form onSubmit={handleSubmitHeader}>
+          <ModalHeader toggle={closeModalHeader}>Form Modal Header</ModalHeader>
+          <ModalBody>
+            <FormGroup row className="mb-4">
+              <Label md={4}>Judul Header</Label>
+              <Col md={8}>
+                <Input
+                  value={dataPayloadHeader.title || ""}
+                  onChange={handleChangeHeader}
+                  name="title"
+                  required
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row className="mb-4">
+              <Label md={4}>URL Tautan</Label>
+              <Col md={8}>
+                <Input
+                  value={dataPayloadHeader.redirect_url || ""}
+                  onChange={handleChangeHeader}
+                  required
+                  name="redirect_url"
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row className="mb-4">
+              <Label md={4}>Foto Header</Label>
+              <Col md={8}>
+                <CustomInput
+                  id="header-custuminput"
+                  onChange={handleChangeHeader}
+                  required
+                  name="image"
+                  type="file"
+                />
+              </Col>
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button size="sm" color="secondary" onClick={closeModalHeader}>
+              Tutup
+            </Button>
+            <Button
+              size="sm"
+              color="dark"
+              type="submit"
+              disabled={isLoadingLayout}
+            >
+              {isLoadingLayout ? <Spinner size="sm" color="light" /> : "Simpan"}
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
+    </>
   );
 };
 

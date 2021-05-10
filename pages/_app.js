@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { useStore } from "../services/store";
 import { Sidebar, PageLoading } from "../components/layouts";
+import { AlertConfirm } from "../components/partials";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "../scss/main.scss";
 
@@ -74,6 +75,8 @@ const App = ({ Component, pageProps }) => {
         ) : (
           <Component {...pageProps} />
         )}
+
+        <AlertConfirm />
       </div>
     </Provider>
   );

@@ -5,6 +5,7 @@ const Table = (props) => {
       <div className="data-table-header">
         <h6>{title}</h6>
       </div>
+
       <table className="data-table-body">
         <thead>
           <tr>
@@ -15,9 +16,8 @@ const Table = (props) => {
             <th></th>
           </tr>
         </thead>
-
         <tbody>
-          {[1, 2, 3, 4, 5].map((parintis, index) => (
+          {[1, 2, 3, 4, 5].map((data, index) => (
             <tr key={index}>
               <td>USA, International Triathlon Event</td>
               <td style={{ minWidth: 225 }}>

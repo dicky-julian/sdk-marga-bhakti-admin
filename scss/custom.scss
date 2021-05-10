@@ -1,4 +1,7 @@
 $col-primary: #d29f68;
+$col-secondary: #3a416f;
+$col-success: #28a745;
+$col-danger: #dc3545;
 
 // === SIDEBAR ===
 .sidebar {
@@ -232,7 +235,7 @@ $col-primary: #d29f68;
   }
   &-header-home {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     .card-layout-header {
       display: flex;
       flex-direction: column;
@@ -242,11 +245,13 @@ $col-primary: #d29f68;
       background-position: center;
       background-size: cover;
       box-shadow: 0 23px 45px -11px hsl(0deg 0% 8% / 25%);
+      margin-bottom: 20px;
       &:nth-child(1) {
         width: calc(50% - 40px);
       }
       &:not(:first-child) {
         width: 25%;
+        margin-left: 20px;
       }
       &-index {
         display: flex;
@@ -549,6 +554,34 @@ $col-primary: #d29f68;
     background-color: #f8f9fa;
     span {
       font-size: 14px;
+    }
+  }
+}
+
+.alert {
+  &-confirm {
+    &-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px 15px;
+    }
+    svg {
+      margin-bottom: 20px;
+      font-size: 5rem;
+      &.success {
+        color: $col-success;
+      }
+      &.error {
+        color: $col-danger;
+      }
+      &.question {
+        color: $col-secondary;
+      }
+    }
+    p {
+      max-width: 80%;
+      margin: 0 auto;
     }
   }
 }

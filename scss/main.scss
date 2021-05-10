@@ -3,6 +3,7 @@
 @import "./custom.scss";
 @import "./responsive.scss";
 $col-primary: #d29f68;
+$col-secondary: #141727;
 * {
   font-family: "Open Sans", sans-serif;
   box-sizing: border-box;
@@ -29,4 +30,21 @@ a {
     background-color: transparent;
     color: #cb0c9f;
   }
+  &-dark {
+    background-image: linear-gradient(310deg, #141727, #3a416f);
+    color: #fff;
+  }
+}
+
+.col-form-label {
+  font-size: 14px !important;
+}
+
+.modal-header {
+  align-items: center;
+}
+
+.form-control,
+.custom-file-label {
+  font-size: 14px;
 }
