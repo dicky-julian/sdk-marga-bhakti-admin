@@ -25,12 +25,6 @@ const LoginPage = () => {
     e.preventDefault();
   };
 
-  const checkUserData = () => {
-    fireAuth.onAuthStateChanged((user) => {
-      // console.log(user, "user");
-    });
-  };
-
   useEffect(() => {
     checkUserData();
     return () => {

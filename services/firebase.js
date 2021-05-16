@@ -31,3 +31,7 @@ if (!firebase.apps.length) {
 export const fireAuth = firebase.auth();
 export const fireDatabase = firebase.database();
 export const fireStorage = firebase.storage().ref();
+
+export const getStorageRef = (URL) => {
+  return firebase.storage().refFromURL(URL);
+};

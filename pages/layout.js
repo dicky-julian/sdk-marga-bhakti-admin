@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,6 +18,8 @@ import {
   setDataAlertConfirm,
   getDataLayout,
   postDataLayoutHeader,
+  putDataLayoutHeader,
+  deleteDataLayoutHeader,
 } from "../redux/actions/layout";
 import { PageLoading } from "../components/layouts";
 
@@ -39,20 +40,21 @@ const LayoutPage = () => {
   };
 
   // === OPEN MODAL POST LAYOUT HEADER ===
-  const openModalHeader = (action, label, sublabel = null) => {
-    // setDataModalHeader({
-    //   action,
-    //   label,
-    //   sublabel,
-    // });
-    dispatch(
-      setDataAlertConfirm({
-        type: "error",
-        title: "Apakah Anda yakin?",
-        description: "Semua data yang tidak tersimpan akan hilang!",
-        approveDisable: true,
-      })
-    );
+  const openModalHeader = (data = null, label, sublabel = null) => {
+    setDataModalHeader({
+      data,
+      label,
+      sublabel,
+    });
+    if (data) {
+      if (data.label) {
+        const newDataPayload = { ...data };
+        delete newDataPayload.label;
+        setDataPayloadHeader(newDataPayload);
+      } else {
+        setDataPayloadHeader(data);
+      }
+    }
   };
 
   // === HANDLE CHANGE MODAL POST LAYOUT HEADER ===
@@ -72,22 +74,42 @@ const LayoutPage = () => {
   // === MODAL POST LAYOUT HEADER SUBMISSION ===
   const handleSubmitHeader = async (e) => {
     e.preventDefault();
-    await dispatch(
-      postDataLayoutHeader(
-        dataPayloadHeader,
-        dataModalHeader.label,
-        dataModalHeader.sublabel
-      )
+    if (dataModalHeader.data) {
+      await dispatch(putDataLayoutHeader(dataPayloadHeader, dataModalHeader));
+    } else {
+      await dispatch(postDataLayoutHeader(dataPayloadHeader, dataModalHeader));
+    }
+    setDataModalHeader(null);
+    setDataPayloadHeader({});
+  };
+
+  // === DELETE LAYOUT HEADER SUBMISSION ===
+  const handleDeleteHeader = async (dataIndex) => {
+    dispatch(
+      setDataAlertConfirm({
+        type: "question",
+        title: "Apakah Anda yakin?",
+        description: "Data yang dihapus tidak dapat dimuat kembali.",
+        onApprove: () =>
+          dispatch(
+            deleteDataLayoutHeader(dataLayout.header.homepages[dataIndex], {
+              label: "home",
+              sublabel: dataIndex,
+            })
+          ),
+      })
     );
   };
 
   useEffect(() => {
-    dispatch(getDataLayout());
+    if (!dataLayout) {
+      dispatch(getDataLayout());
+    }
   }, []);
 
   return (
     <>
-      {dataLayout ? (
+      {dataLayout && dataLayout.header ? (
         <div className="layout-page">
           {/* === HEADER BERANDA === */}
           <div className="layout-page-title">
@@ -100,7 +122,11 @@ const LayoutPage = () => {
             <div>
               <button
                 onClick={() =>
-                  openModalHeader("add", "home", dataLayout.header.home.length)
+                  openModalHeader(
+                    null,
+                    "home",
+                    dataLayout.header.homepages.length
+                  )
                 }
               >
                 <i className="fas fa-plus mr-1"></i> Tambah
@@ -108,7 +134,7 @@ const LayoutPage = () => {
             </div>
           </div>
           <div className="layout-header-home">
-            {dataLayout.header.home.map((header, index) => (
+            {dataLayout.header.homepages.map((header, index) => (
               <div
                 className="card-layout-header"
                 style={{
@@ -121,13 +147,24 @@ const LayoutPage = () => {
                   <h5 className="text-uppercase">{header.title}</h5>
                 </div>
                 <div className="card-tools">
-                  <Link href={header.redirect_url}>
-                    <a>
-                      <i className="fas fa-link"></i> URL Tautan
-                    </a>
-                  </Link>
+                  <a href={header.redirect_url} target="_blank">
+                    <i className="fas fa-link"></i> URL Tautan
+                  </a>
                   <div className="d-flex">
-                    <button className="btn-edit">
+                    {dataLayout.header.homepages &&
+                      dataLayout.header.homepages.length > 1 && (
+                        <button
+                          className="btn-light"
+                          style={{ color: "#212529" }}
+                          onClick={() => handleDeleteHeader(index)}
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      )}
+                    <button
+                      className="btn-edit"
+                      onClick={() => openModalHeader(header, "home", index)}
+                    >
                       <i className="fas fa-pencil-alt"></i>
                     </button>
                   </div>
@@ -160,7 +197,10 @@ const LayoutPage = () => {
                 </div>
                 <div className="card-tools justify-content-end">
                   <div className="d-flex">
-                    <button className="btn-edit">
+                    <button
+                      className="btn-edit"
+                      onClick={() => openModalHeader(header, header.label)}
+                    >
                       <i className="fas fa-pencil-alt"></i>
                     </button>
                   </div>
@@ -174,58 +214,77 @@ const LayoutPage = () => {
       )}
 
       <Modal isOpen={Boolean(dataModalHeader)} size="md">
-        <Form onSubmit={handleSubmitHeader}>
-          <ModalHeader toggle={closeModalHeader}>Form Modal Header</ModalHeader>
-          <ModalBody>
-            <FormGroup row className="mb-4">
-              <Label md={4}>Judul Header</Label>
-              <Col md={8}>
-                <Input
-                  value={dataPayloadHeader.title || ""}
-                  onChange={handleChangeHeader}
-                  name="title"
-                  required
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row className="mb-4">
-              <Label md={4}>URL Tautan</Label>
-              <Col md={8}>
-                <Input
-                  value={dataPayloadHeader.redirect_url || ""}
-                  onChange={handleChangeHeader}
-                  required
-                  name="redirect_url"
-                />
-              </Col>
-            </FormGroup>
-            <FormGroup row className="mb-4">
-              <Label md={4}>Foto Header</Label>
-              <Col md={8}>
-                <CustomInput
-                  id="header-custuminput"
-                  onChange={handleChangeHeader}
-                  required
-                  name="image"
-                  type="file"
-                />
-              </Col>
-            </FormGroup>
-          </ModalBody>
-          <ModalFooter>
-            <Button size="sm" color="secondary" onClick={closeModalHeader}>
-              Tutup
-            </Button>
-            <Button
-              size="sm"
-              color="dark"
-              type="submit"
-              disabled={isLoadingLayout}
-            >
-              {isLoadingLayout ? <Spinner size="sm" color="light" /> : "Simpan"}
-            </Button>
-          </ModalFooter>
-        </Form>
+        {dataModalHeader && (
+          <Form onSubmit={handleSubmitHeader}>
+            <ModalHeader toggle={closeModalHeader}>
+              Form Data Header
+            </ModalHeader>
+            <ModalBody>
+              <FormGroup row className="mb-4">
+                <Label md={4}>Judul Header</Label>
+                <Col md={8}>
+                  <Input
+                    value={dataPayloadHeader.title || ""}
+                    onChange={handleChangeHeader}
+                    name="title"
+                    required
+                  />
+                </Col>
+              </FormGroup>
+              {Number.isInteger(dataModalHeader.sublabel) && (
+                <FormGroup row className="mb-4">
+                  <Label md={4}>URL Tautan</Label>
+                  <Col md={8}>
+                    <Input
+                      value={dataPayloadHeader.redirect_url || ""}
+                      onChange={handleChangeHeader}
+                      required
+                      name="redirect_url"
+                    />
+                  </Col>
+                </FormGroup>
+              )}
+              <FormGroup row className="mb-3">
+                <Label md={4}>Foto Header</Label>
+                <Col md={8}>
+                  <CustomInput
+                    id="header-custuminput"
+                    onChange={handleChangeHeader}
+                    required={!dataModalHeader.data}
+                    name="image"
+                    type="file"
+                  />
+                  {typeof dataPayloadHeader.image === "string" && (
+                    <a
+                      target="_blank"
+                      href={dataPayloadHeader.image}
+                      className="text-primary"
+                    >
+                      <small>Lihat Gambar</small>
+                    </a>
+                  )}
+                </Col>
+              </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+              <Button size="sm" color="secondary" onClick={closeModalHeader}>
+                Tutup
+              </Button>
+              <Button
+                size="sm"
+                color="dark"
+                type="submit"
+                disabled={isLoadingLayout}
+              >
+                {isLoadingLayout ? (
+                  <Spinner size="sm" color="light" />
+                ) : (
+                  "Simpan"
+                )}
+              </Button>
+            </ModalFooter>
+          </Form>
+        )}
       </Modal>
     </>
   );

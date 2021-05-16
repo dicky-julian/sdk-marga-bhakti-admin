@@ -1,4 +1,5 @@
 import { fireDatabase } from "../firebase";
+import { fetchResponse } from "../helpers";
 
 const reference = "/references";
 
@@ -7,10 +8,16 @@ export const getReferences = () => {
     fireDatabase.ref(reference).on(
       "value",
       (snapshot) => {
-        resolve(snapshot.val());
+        resolve(
+          fetchResponse(
+            200,
+            snapshot.val(),
+            "Berhasil mendapatkan data referensi."
+          )
+        );
       },
       (error) => {
-        reject(error);
+        reject(fetchResponse(400, error, "Gagal mendapatkan data referensi."));
       }
     );
   });

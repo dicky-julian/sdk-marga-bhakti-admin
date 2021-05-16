@@ -33,6 +33,17 @@ a {
   &-dark {
     background-image: linear-gradient(310deg, #141727, #3a416f);
     color: #fff;
+    transition: 0.3;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  &-md {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
   }
 }
 
@@ -47,4 +58,8 @@ a {
 .form-control,
 .custom-file-label {
   font-size: 14px;
+}
+
+.modal-open {
+  overflow: auto !important;
 }
