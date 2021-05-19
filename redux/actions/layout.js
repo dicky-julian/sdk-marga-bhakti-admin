@@ -2,6 +2,7 @@ import {
   SET_IS_LOADING_LAYOUT,
   SET_DATA_LAYOUT,
   SET_DATA_ALERT_CONFIRM,
+  SET_DATA_ROUTE_PUSHER,
 } from "../actionTypes";
 import {
   getLayout,
@@ -23,6 +24,14 @@ export const setDataLayout = (dataLayout) => (dispatch) => {
   dispatch({
     type: SET_DATA_LAYOUT,
     payload: dataLayout,
+  });
+};
+
+// === SET ROUTE PUSHER ===
+export const setDataUrlPusher = (URL) => (dispatch) => {
+  dispatch({
+    type: SET_DATA_ROUTE_PUSHER,
+    payload: URL,
   });
 };
 

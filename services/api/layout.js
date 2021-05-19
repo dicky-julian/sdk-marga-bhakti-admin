@@ -1,5 +1,5 @@
-import { fireDatabase, fireStorage, getStorageRef } from "../firebase";
-import { fetchResponse } from "../helpers";
+import { fireDatabase, getStorageRef } from "../firebase";
+import { fetchResponse, compressImg } from "../helpers";
 import { postStorage } from "./store";
 
 const reference = "/layout";
@@ -21,6 +21,9 @@ export const getLayout = () => {
 // === POST LAYOUT HEADER ===
 export const postLayoutHeader = (dataLayout, label) => {
   return new Promise(async (resolve, reject) => {
+    await compressImg(dataLayout.image).then((imageFile) => {
+      dataLayout.image = imageFile;
+    });
     // === #1 SAVE HEADER'S IMAGE TO STORAGE ===
     await postStorage(dataLayout.image, `layout/${new Date().getTime()}`)
       .then((response) => {
@@ -59,6 +62,9 @@ export const putLayoutHeader = (dataLayout, dataLayoutOld, label) => {
   return new Promise(async (resolve, reject) => {
     // === #1 IF USER PUT HEADER'S IMAGE, SAVE NEW HEADER'S IMAGE TO STORAGE ===
     if (typeof dataLayout.image === "object") {
+      await compressImg(dataLayout.image).then((imageFile) => {
+        dataLayout.image = imageFile;
+      });
       await postStorage(
         dataLayout.image,
         `layout/${new Date().getTime()}`,

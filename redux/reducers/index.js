@@ -3,10 +3,12 @@ import referenceReducer from "./reference";
 import authReducer from "./auth";
 import layoutReducer from "./layout";
 import articleReducer from "./article";
+import eventReducer from "./event";
 
 export default combineReducers({
   reference: referenceReducer,
   auth: authReducer,
   layout: layoutReducer,
   article: articleReducer,
+  event: eventReducer,
 });

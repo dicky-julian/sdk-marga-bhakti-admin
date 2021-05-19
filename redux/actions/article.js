@@ -6,6 +6,7 @@ import {
   deleteArticle,
 } from "../../services/api";
 import { setDataAlertConfirm } from "./layout";
+import { compressImg } from "../../services/helpers";
 
 // === SET FORM ARTICLE LOADING ===
 export const setIsLoadingArticle = (isLoading) => (dispatch) => {
@@ -41,12 +42,9 @@ export const getDataArticle = () => async (dispatch) => {
 
 // === POST DATA ARTICLE ===
 export const postDataArticle = (dataPayload) => async (dispatch, state) => {
-  dispatch(setIsLoadingArticle(true));
   try {
     const { dataArticle } = state().article;
-
     await postArticle(dataPayload).then((response) => {
-      console.log(response, "response");
       const newDataArticle = [...dataArticle];
       newDataArticle.push(response.data);
 
@@ -61,7 +59,6 @@ export const postDataArticle = (dataPayload) => async (dispatch, state) => {
       );
     });
   } catch (error) {
-    console.log(error, "error");
     dispatch(
       setDataAlertConfirm({
         type: "error",

@@ -3,24 +3,43 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "reactstrap";
-import { getDataReference } from "../../redux/actions";
+import {
+  getDataReference,
+  validateSession,
+  setUserSession,
+} from "../../redux/actions";
 
 const faviconUrl =
   "https://yayasankarmel.or.id/wp-content/uploads/2019/03/yayasan-pendidikan-karmel-logo.png";
 
 const Sidebar = () => {
-  const { route } = useRouter();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { dataReference } = state.reference;
+  const { dataSession } = state.auth;
+  const { route, push } = useRouter();
 
   const [isNavToggle, setIsNavToggle] = useState(false);
 
+  // === GET ALL DATA REFERENCES ===
   useEffect(() => {
     if (!dataReference) {
       dispatch(getDataReference());
     }
   }, []);
+
+  // === VALIDATE USER'S SESSION ===
+  useEffect(() => {
+    if (!dataSession) {
+      validateSession()
+        .then((dataUser) => {
+          dispatch(setUserSession(dataUser));
+        })
+        .catch(() => {
+          push("/login");
+        });
+    }
+  }, [dataSession]);
 
   return (
     <nav className={`sidebar ${isNavToggle ? "active" : ""}`}>

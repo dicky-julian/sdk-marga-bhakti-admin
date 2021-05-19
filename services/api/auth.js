@@ -2,6 +2,21 @@ import { fireAuth, fireDatabase } from "../firebase";
 import { fetchResponse } from "../helpers";
 import { postUser } from "./user";
 
+const reference = "/user";
+
+export const getUserByUid = (uid) => {
+  return new Promise((resolve, reject) => {
+    fireDatabase.ref(`${reference}/${uid}`).on("value", (snapshot) => {
+      const result = snapshot.val();
+      if (result) {
+        resolve(fetchResponse(200, result, "Berhasil menerima data user."));
+      }
+
+      reject(fetchResponse(404, null, "Data user tidak ditemukan."));
+    });
+  });
+};
+
 export const login = (email, password) => {
   return new Promise((resolve, reject) => {
     fireAuth

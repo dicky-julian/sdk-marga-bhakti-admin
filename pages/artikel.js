@@ -32,9 +32,6 @@ const ArtikelPage = () => {
   const editor = useRef(null);
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const editorConfig = {
-    readonly: false,
-  };
 
   const [isLoading, setIsLoading] = useState(false);
   const [dataModal, setDataModal] = useState(null);
@@ -56,24 +53,25 @@ const ArtikelPage = () => {
       field: "created_at",
     },
     {
-      title: "Banyak Kunjungan",
+      title: "Banyak Dilihat",
       field: "visitor",
     },
   ];
 
-  // === CLOSE MODAL POST ARTICLE ===
-  const closeModalHeader = () => {
-    setDataModal(null);
-    setDataPayload({});
-  };
-
   // === OPEN MODAL POST ARTICLE ===
-  const openModalHeader = (data = null, label) => {
+  const openModal = (data = null, label) => {
     setDataModal({
       data,
       label,
     });
     setDataPayload(data || {});
+  };
+
+  // === CLOSE MODAL POST ARTICLE ===
+  const closeModal = () => {
+    setDataModal(null);
+    setDataPayload({});
+    setDataContent("");
   };
 
   // === HANDLE CHANGE MODAL POST DATA ARTICLE ===
@@ -133,9 +131,9 @@ const ArtikelPage = () => {
   };
 
   const actionReferences = {
-    add: openModalHeader,
+    add: openModal,
     edit: (data, label) => {
-      openModalHeader(data, label);
+      openModal(data, label);
       setDataContent(data.description || "");
     },
     delete: (dataIndex) => handleDelete(dataIndex),
@@ -165,9 +163,7 @@ const ArtikelPage = () => {
       <Modal isOpen={Boolean(dataModal)}>
         {dataModal && (
           <Form onSubmit={handleSubmit}>
-            <ModalHeader toggle={closeModalHeader}>
-              Form Data Artikel
-            </ModalHeader>
+            <ModalHeader toggle={closeModal}>Form Data Artikel</ModalHeader>
             <ModalBody>
               <FormGroup row className="mb-4">
                 <Label md={4}>Judul</Label>
@@ -206,7 +202,6 @@ const ArtikelPage = () => {
                   ref={editor}
                   value={dataContent}
                   tabIndex={1}
-                  // config={editorConfig}
                   onChange={(content) => {
                     if (content) setDataContent(content);
                   }}
@@ -214,14 +209,14 @@ const ArtikelPage = () => {
               </FormGroup>
             </ModalBody>
             <ModalFooter>
-              <Button size="sm" onClick={closeModalHeader}>
+              <Button size="sm" onClick={closeModal}>
                 Kembali
               </Button>
               <Button
                 size="sm"
                 color="dark"
                 type="submit"
-                disabled={!dataContent}
+                disabled={!dataContent || isLoading}
               >
                 {isLoading ? <Spinner size="sm" color="light" /> : "Simpan"}
               </Button>

@@ -1,11 +1,17 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Switch from "rc-switch";
 import "rc-switch/assets/index.css";
 import { Spinner } from "reactstrap";
-import { login, logout, register, updateUser } from "../services/api";
-import { fireAuth } from "../services/firebase";
+import { handleLogin, validateSession, setUserSession } from "../redux/actions";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const { dataSession } = state.auth;
+  const { push } = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
   const [dataPayload, setDataPayload] = useState({});
@@ -23,14 +29,34 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+    await dispatch(
+      handleLogin(dataPayload.email, dataPayload.password, isRemember)
+    );
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    checkUserData();
     return () => {
       setDataPayload({});
     };
   }, []);
+
+  useEffect(() => {
+    if (!dataSession) {
+      validateSession()
+        .then((dataUser) => {
+          dispatch(setUserSession(dataUser));
+          push("/layout");
+        })
+        .catch(() => {
+          console.log("error");
+        });
+    } else {
+      push("/layout");
+    }
+  }, [dataSession]);
 
   return (
     <div className="login-page">
@@ -47,7 +73,7 @@ const LoginPage = () => {
             <input
               type="email"
               name="email"
-              value={dataPayload.email}
+              value={dataPayload.email || ""}
               onChange={handleChange}
               placeholder="Username"
               required
@@ -61,7 +87,7 @@ const LoginPage = () => {
             <input
               type="password"
               name="password"
-              value={dataPayload.password}
+              value={dataPayload.password || ""}
               onChange={handleChange}
               placeholder="Password"
               required
@@ -77,7 +103,7 @@ const LoginPage = () => {
             <small>Ingat Saya</small>
           </div>
           <button type="submit" className="button">
-            Masuk
+            {isLoading ? <Spinner size="sm" color="light" /> : "Masuk"}
           </button>
         </form>
       </div>

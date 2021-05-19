@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { Button } from "reactstrap";
 
 const Table = (props) => {
@@ -6,6 +6,12 @@ const Table = (props) => {
   const [searchToggle, setSearchToggle] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState(null);
   const [searchResult, setSearchResult] = useState(null);
+  const [paginationIndex, setPaginationIndex] = useState(1);
+  const [paginationLength, setPaginationLength] = useState(0);
+
+  const tableConfig = {
+    itemPerPage: 5,
+  };
 
   const showedData = searchResult || data;
 
@@ -27,8 +33,20 @@ const Table = (props) => {
       });
     });
 
+    setPaginationIndex(1);
     setSearchResult(selectedData);
   };
+
+  const handlePaginateData = () => {
+    const numberOfPage = Math.ceil(
+      (showedData.length + 1) / tableConfig.itemPerPage
+    );
+    setPaginationLength(numberOfPage);
+  };
+
+  useEffect(() => {
+    if (showedData) handlePaginateData();
+  }, [showedData]);
 
   useEffect(() => {
     if (searchKeyword && searchKeyword.length > 2) {
@@ -75,7 +93,6 @@ const Table = (props) => {
           )}
         </div>
       </div>
-
       <table className="data-table-body">
         <thead>
           <tr>
@@ -86,42 +103,71 @@ const Table = (props) => {
           </tr>
         </thead>
         <tbody>
-          {showedData.map((dataTable, index) => (
-            <tr key={index}>
-              {dataField.map(({ field }, fieldIndex) => (
-                <td key={fieldIndex}>{dataTable[field]}</td>
-              ))}
-              <td>
-                <div className="tab-action">
-                  <button
-                    className="btn-edit"
-                    onClick={() => action.edit(dataTable, index)}
-                  >
-                    <i className="fas fa-pen"></i>
-                  </button>
-                  <button
-                    className="btn-delete ml-1"
-                    onClick={() => action.delete(index)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+          {showedData.map((dataTable, index) => {
+            if (
+              index >= tableConfig.itemPerPage * (paginationIndex - 1) &&
+              index < tableConfig.itemPerPage * paginationIndex
+            ) {
+              return (
+                <tr key={index}>
+                  {dataField.map(({ field }, fieldIndex) => (
+                    <td key={fieldIndex}>{dataTable[field]}</td>
+                  ))}
+                  <td>
+                    <div className="tab-action">
+                      <button
+                        className="btn-edit"
+                        onClick={() => action.edit(dataTable, index)}
+                      >
+                        <i className="fas fa-pen"></i>
+                      </button>
+                      <button
+                        className="btn-delete ml-1"
+                        onClick={() => action.delete(index)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            }
+          })}
         </tbody>
       </table>
-
       <div className="data-table-footer">
-        <span>Menampilkan 1 dari 13 Halaman</span>
+        <span>
+          Menampilkan {paginationIndex} dari {paginationLength} Halaman
+        </span>
         <div className="data-table-pagintaion">
-          <button>
+          <button
+            disabled={paginationLength === 1}
+            onClick={() => setPaginationIndex(1)}
+          >
             <i className="fa fa-chevron-left"></i>
           </button>
-          <button className="active">1</button>
-          <button>2</button>
-          <button>...</button>
-          <button>
+          {Array.apply(null, { length: paginationLength }).map(
+            (data, index) => {
+              if (index >= paginationIndex - 2 && index <= paginationIndex) {
+                return (
+                  <button
+                    className={`${
+                      index + 1 === paginationIndex ? "active" : ""
+                    }`}
+                    onClick={() => setPaginationIndex(index + 1)}
+                    key={index}
+                  >
+                    {index + 1}
+                  </button>
+                );
+              }
+            }
+          )}
+          {paginationLength > 3 && <button>...</button>}
+          <button
+            disabled={paginationIndex === paginationLength}
+            onClick={() => setPaginationIndex(paginationIndex + 1)}
+          >
             <i className="fa fa-chevron-right"></i>
           </button>
         </div>

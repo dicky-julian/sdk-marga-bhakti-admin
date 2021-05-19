@@ -1,5 +1,5 @@
-import { fireDatabase, fireStorage, getStorageRef } from "../firebase";
-import { fetchResponse } from "../helpers";
+import { fireDatabase, getStorageRef } from "../firebase";
+import { fetchResponse, compressImg } from "../helpers";
 import { postStorage } from "./store";
 
 const reference = "/article";
@@ -21,6 +21,9 @@ export const getArticle = () => {
 // === POST DATA ARTICLE ===
 export const postArticle = (dataArticle) => {
   return new Promise(async (resolve, reject) => {
+    await compressImg(dataArticle.image).then((imageFile) => {
+      dataArticle.image = imageFile;
+    });
     // === #1 SAVE LAYOUT'S IMAGE TO STORAGE ===
     await postStorage(dataArticle.image, `article/${new Date().getTime()}`)
       .then((response) => {
@@ -51,6 +54,10 @@ export const putArticle = (dataArticle, dataArticleOld) => {
   return new Promise(async (resolve, reject) => {
     // === #1 IF USER PUT ARTICLE'S IMAGE, SAVE NEW ARTICLE'S IMAGE TO STORAGE ===
     if (typeof dataArticle.image === "object") {
+      await compressImg(dataArticle.image).then((imageFile) => {
+        dataArticle.image = imageFile;
+      });
+
       await postStorage(
         dataArticle.image,
         `article/${new Date().getTime()}`,
