@@ -35,6 +35,8 @@ export const handleLogin =
             isRemember: isRemember,
           };
 
+          console.log(dataSession, "dataSession");
+
           // === SAVE USER DATA TO LOCAL STORAGE ===
           setLocalStorage("access_sdk", dataSession);
           dispatch(setUserSession(dataSession));
