@@ -1,41 +1,41 @@
-import { SET_DATA_EVENT } from "../actionTypes";
-import { getEvent, postEvent, putEvent, deleteEvent } from "../../services/api";
+import { SET_DATA_INFO } from "../actionTypes";
+import { getInfo, postInfo, putInfo, deleteInfo } from "../../services/api";
 import { setDataAlertConfirm } from "./layout";
 
-// === SET ALL DATA EVENT ===
-export const setDataEvent = (dataEvent) => (dispatch) => {
+// === SET ALL DATA INFO ===
+export const setDataInfo = (dataInfo) => (dispatch) => {
   dispatch({
-    type: SET_DATA_EVENT,
-    payload: dataEvent,
+    type: SET_DATA_INFO,
+    payload: dataInfo,
   });
 };
 
-// === GET ALL DATA EVENT ===
-export const getDataEvent = () => async (dispatch) => {
+// === GET ALL DATA INFO ===
+export const getDataInfo = () => async (dispatch) => {
   try {
-    await getEvent().then((response) => {
+    await getInfo().then((response) => {
       const { data } = response;
-      const dataEvent = Object.keys(data).map((eventId) => ({
-        id: eventId,
-        ...data[eventId],
+      const dataInfo = Object.keys(data).map((infoId) => ({
+        id: infoId,
+        ...data[infoId],
       }));
-      dispatch(setDataEvent(dataEvent));
+      dispatch(setDataInfo(dataInfo));
     });
   } catch (error) {
-    dispatch(setDataEvent([]));
+    dispatch(setDataInfo([]));
   }
 };
 
-// === POST DATA EVENT ===
-export const postDataEvent = (dataPayload) => async (dispatch, state) => {
+// === POST DATA INFO ===
+export const postDataInfo = (dataPayload) => async (dispatch, state) => {
   try {
-    const { dataEvent } = state().event;
+    const { dataInfo } = state().info;
 
-    await postEvent(dataPayload).then((response) => {
-      const newDataEvent = [...dataEvent];
-      newDataEvent.push(response.data);
+    await postInfo(dataPayload).then((response) => {
+      const newDataInfo = [...dataInfo];
+      newDataInfo.push(response.data);
 
-      dispatch(setDataEvent(newDataEvent));
+      dispatch(setDataInfo(newDataInfo));
       dispatch(
         setDataAlertConfirm({
           type: "success",
@@ -50,25 +50,25 @@ export const postDataEvent = (dataPayload) => async (dispatch, state) => {
       setDataAlertConfirm({
         type: "error",
         title: "Gagal!",
-        description: "Kesalahan saat menyimpan data acara.",
+        description: "Kesalahan saat menyimpan data info.",
         declineDisable: true,
       })
     );
   }
 };
 
-// === PUT DATA EVENT ===
-export const putDataEvent =
+// === PUT DATA INFO ===
+export const putDataInfo =
   (dataPayload, dataAction) => async (dispatch, state) => {
     try {
-      const { dataEvent } = state().event;
+      const { dataInfo } = state().info;
       const { label } = dataAction;
 
-      await putEvent(dataPayload).then((response) => {
-        const newDataEvent = [...dataEvent];
-        newDataEvent[label] = response.data;
+      await putInfo(dataPayload).then((response) => {
+        const newDataInfo = [...dataInfo];
+        newDataInfo[label] = response.data;
 
-        dispatch(setDataEvent(newDataEvent));
+        dispatch(setDataInfo(newDataInfo));
         dispatch(
           setDataAlertConfirm({
             type: "success",
@@ -83,26 +83,25 @@ export const putDataEvent =
         setDataAlertConfirm({
           type: "error",
           title: "Gagal!",
-          description: error.message || "Kesalahan saat menyimpan data acara.",
-          declineDisable: true,
+          description: error.message || "Kesalahan saat menyimpan data info.",
         })
       );
     }
   };
 
-// === DELETE DATA EVENT ===
-export const deleteDataEvent =
+// === DELETE DATA INFO ===
+export const deleteDataInfo =
   (dataPayload, dataAction) => async (dispatch, state) => {
     try {
-      const { dataEvent } = state().event;
+      const { dataInfo } = state().info;
       const { label } = dataAction;
 
-      await deleteEvent(dataPayload)
+      await deleteInfo(dataPayload)
         .then((response) => {
-          let newDataEvent = [...dataEvent];
+          let newDataInfo = [...dataInfo];
 
-          newDataEvent.splice(label, 1);
-          dispatch(setDataEvent(newDataEvent));
+          newDataInfo.splice(label, 1);
+          dispatch(setDataInfo(newDataInfo));
           dispatch(setDataAlertConfirm(null));
           setTimeout(() => {
             dispatch(
@@ -123,7 +122,7 @@ export const deleteDataEvent =
         setDataAlertConfirm({
           type: "error",
           title: "Gagal!",
-          description: error.message || "Kesalahan saat menghapus data acara.",
+          description: error.message || "Kesalahan saat menghapus data info.",
           declineDisable: true,
         })
       );

@@ -1,7 +1,11 @@
 import moment from "moment";
-import { setDataAlertConfirm, setDataUrlPusher } from "./layout";
-import { setLocalStorage, getLocalStorage } from "../../services/helpers";
-import { login, getUserByUid, logout } from "../../services/api";
+import { setDataAlertConfirm } from "./layout";
+import {
+  setLocalStorage,
+  getLocalStorage,
+  encrypt,
+} from "../../services/helpers";
+import { getUserByKey } from "../../services/api";
 import { SET_DATA_SESSION } from "../actionTypes";
 
 // === SET USER SESSION ===
@@ -16,58 +20,57 @@ export const setUserSession = (dataSession) => (dispatch) => {
 export const handleLogin =
   (username, password, isRemember) => async (dispatch) => {
     try {
-      await login(username, password)
-        .then(async (response) => {
-          const { uid, email, displayName, photoURL } = response.data;
+      // === GET DATA USER BY USERNAME/EMAIL ===
+      await getUserByKey("email", username)
+        .then((response) => {
+          let dataUser = {};
+          Object.keys(response.data).map((uid, index) => {
+            // === GET FIRST USER FROM SEARCH LIST ===
+            if (index === 0) {
+              dataUser = response.data[uid];
+              dataUser.uid = uid;
+              dataUser.isRemember = isRemember;
+            }
+          });
 
-          // === GET OTHER USER DATA ===
-          const dataUser = await getUserByUid(uid);
-          const { created_at, role } = dataUser.data;
-
-          const dataSession = {
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            photoURL: photoURL,
-            createdAt: created_at,
-            role: role,
-            expiredDate: new Date(),
-            isRemember: isRemember,
-          };
-
-          // === SAVE USER DATA TO LOCAL STORAGE ===
-          setLocalStorage("access_sdk", dataSession);
-          dispatch(setUserSession(dataSession));
-          dispatch(
-            setDataAlertConfirm({
-              type: "success",
-              title: "Berhasil Masuk!",
-              declineDisable: true,
-            })
-          );
+          const encodedPassword = encrypt(password);
+          // === COMPARE PASSWORD ===
+          if (encodedPassword === dataUser.password) {
+            // === SAVE LOGIN DATA TO LOCAL STORAGE ===
+            setLocalStorage("access_sdk", dataUser);
+            dispatch(setUserSession(dataUser));
+            dispatch(
+              setDataAlertConfirm({
+                type: "success",
+                title: "Berhasil Masuk.",
+                description: "Anda akan diarahkan ke halaman dashboard ...",
+                declineDisable: true,
+              })
+            );
+          } else {
+            throw null;
+          }
         })
-        .catch((error) => {
-          console.log(error, "error login");
+        .catch(() => {
+          throw null;
         });
     } catch (error) {
-      console.log(error, "error");
+      dispatch(
+        setDataAlertConfirm({
+          type: "error",
+          title: "Gagal!",
+          description:
+            "Username atau Password yang Anda masukkan tidak sesuai.",
+          declineDisable: true,
+        })
+      );
     }
   };
 
 // === HANDLE LOGOUT ===
 export const handleLogout = () => async (dispatch) => {
-  try {
-    await logout()
-      .then(() => {
-        setLocalStorage("access_sdk", null);
-        dispatch(setUserSession(null));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  } catch (error) {
-    console.log(error, "error");
-  }
+  localStorage.removeItem("access_sdk");
+  dispatch(setUserSession(null));
 };
 
 // === HANDLE VALIDATE USER SESSION ===

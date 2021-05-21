@@ -3,11 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "reactstrap";
-import {
-  getDataReference,
-  validateSession,
-  setUserSession,
-} from "../../redux/actions";
+import { getDataReference } from "../../redux/actions";
 
 const faviconUrl =
   "https://yayasankarmel.or.id/wp-content/uploads/2019/03/yayasan-pendidikan-karmel-logo.png";
@@ -16,8 +12,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { dataReference } = state.reference;
-  const { dataSession } = state.auth;
-  const { route, push } = useRouter();
+  const { route } = useRouter();
 
   const [isNavToggle, setIsNavToggle] = useState(false);
 
@@ -27,19 +22,6 @@ const Sidebar = () => {
       dispatch(getDataReference());
     }
   }, []);
-
-  // === VALIDATE USER'S SESSION ===
-  useEffect(() => {
-    if (!dataSession) {
-      validateSession()
-        .then((dataUser) => {
-          dispatch(setUserSession(dataUser));
-        })
-        .catch(() => {
-          push("/login");
-        });
-    }
-  }, [dataSession]);
 
   return (
     <nav className={`sidebar ${isNavToggle ? "active" : ""}`}>
@@ -109,21 +91,16 @@ const Sidebar = () => {
             </div>
           </Link>
 
-          <div className={`sidebar-link ${route === "/mapel" ? "active" : ""}`}>
-            <div className="icon-bar mr-3">
-              <i className="fas fa-journal-whills"></i>
+          <Link href="/pegawai">
+            <div
+              className={`sidebar-link ${route === "/pegawai" ? "active" : ""}`}
+            >
+              <div className="icon-bar mr-3">
+                <i className="fas fa-users"></i>
+              </div>
+              <span className="link-bar">Data Pegawai</span>
             </div>
-            <span className="link-bar">Mata Pelajaran</span>
-          </div>
-
-          <div
-            className={`sidebar-link ${route === "/data-guru" ? "active" : ""}`}
-          >
-            <div className="icon-bar mr-3">
-              <i className="fas fa-users"></i>
-            </div>
-            <span className="link-bar">Data Guru</span>
-          </div>
+          </Link>
 
           <div
             className={`sidebar-link ${
@@ -134,6 +111,13 @@ const Sidebar = () => {
               <i className="fas fa-user-graduate"></i>
             </div>
             <span className="link-bar">Data Siswa</span>
+          </div>
+
+          <div className={`sidebar-link ${route === "/mapel" ? "active" : ""}`}>
+            <div className="icon-bar mr-3">
+              <i className="fas fa-journal-whills"></i>
+            </div>
+            <span className="link-bar">Mata Pelajaran</span>
           </div>
         </div>
       </div>

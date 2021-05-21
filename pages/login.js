@@ -1,16 +1,12 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Switch from "rc-switch";
 import "rc-switch/assets/index.css";
 import { Spinner } from "reactstrap";
-import { handleLogin, validateSession, setUserSession } from "../redux/actions";
+import { handleLogin } from "../redux/actions";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-  const { dataSession } = state.auth;
-  const { push } = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
@@ -42,21 +38,6 @@ const LoginPage = () => {
       setDataPayload({});
     };
   }, []);
-
-  useEffect(() => {
-    if (!dataSession) {
-      validateSession()
-        .then((dataUser) => {
-          dispatch(setUserSession(dataUser));
-          push("/layout");
-        })
-        .catch(() => {
-          console.log("error");
-        });
-    } else {
-      push("/layout");
-    }
-  }, [dataSession]);
 
   return (
     <div className="login-page">

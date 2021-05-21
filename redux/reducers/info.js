@@ -1,15 +1,15 @@
-import { SET_DATA_ARTICLE } from "../actionTypes";
+import { SET_DATA_INFO } from "../actionTypes";
 
 const initialState = {
-  dataArticle: null,
+  dataInfo: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_DATA_ARTICLE:
+    case SET_DATA_INFO:
       return {
         ...state,
-        dataArticle: action.payload,
+        dataInfo: action.payload,
       };
     default:
       return state;

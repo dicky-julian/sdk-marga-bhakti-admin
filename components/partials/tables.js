@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 
 const Table = (props) => {
@@ -38,9 +38,10 @@ const Table = (props) => {
   };
 
   const handlePaginateData = () => {
-    const numberOfPage = Math.ceil(
-      (showedData.length + 1) / tableConfig.itemPerPage
-    );
+    const numberOfPage = Math.ceil(showedData.length / tableConfig.itemPerPage);
+    if (numberOfPage && numberOfPage < paginationIndex) {
+      setPaginationIndex(numberOfPage);
+    }
     setPaginationLength(numberOfPage);
   };
 
@@ -110,9 +111,24 @@ const Table = (props) => {
             ) {
               return (
                 <tr key={index}>
-                  {dataField.map(({ field }, fieldIndex) => (
-                    <td key={fieldIndex}>{dataTable[field]}</td>
-                  ))}
+                  {dataField.map(
+                    ({ field, fieldType, option, style }, fieldIndex) => (
+                      <td key={fieldIndex} style={style || {}}>
+                        {fieldType === "image" ? (
+                          <img
+                            src={dataTable[field]}
+                            className="data-table-image"
+                          />
+                        ) : option ? (
+                          <span className="custom-badge custom-badge-primary">
+                            {option[dataTable[field]]}
+                          </span>
+                        ) : (
+                          dataTable[field]
+                        )}
+                      </td>
+                    )
+                  )}
                   <td>
                     <div className="tab-action">
                       <button

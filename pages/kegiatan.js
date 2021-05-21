@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Modal,
@@ -185,13 +185,15 @@ const AcaraPage = () => {
               <FormGroup row className="mb-4">
                 <Label md={4}>Deskripsi</Label>
                 <Col md={8}>
-                  <Input
-                    type="textarea"
-                    value={dataPayload.description || ""}
+                  <textarea
+                    rows={5}
+                    className="form-control"
                     onChange={handleChange}
                     name="description"
                     required
-                  />
+                  >
+                    {dataPayload.description || ""}
+                  </textarea>
                 </Col>
               </FormGroup>
               <FormGroup row className="mb-4">

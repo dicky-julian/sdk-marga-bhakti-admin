@@ -1,4 +1,4 @@
-import { SET_IS_LOADING_ARTICLE, SET_DATA_ARTICLE } from "../actionTypes";
+import { SET_DATA_ARTICLE } from "../actionTypes";
 import {
   getArticle,
   postArticle,
@@ -6,15 +6,6 @@ import {
   deleteArticle,
 } from "../../services/api";
 import { setDataAlertConfirm } from "./layout";
-import { compressImg } from "../../services/helpers";
-
-// === SET FORM ARTICLE LOADING ===
-export const setIsLoadingArticle = (isLoading) => (dispatch) => {
-  dispatch({
-    type: SET_IS_LOADING_ARTICLE,
-    payload: isLoading,
-  });
-};
 
 // === SET ALL DATA ARTICLE ===
 export const setDataArticle = (dataArticle) => (dispatch) => {

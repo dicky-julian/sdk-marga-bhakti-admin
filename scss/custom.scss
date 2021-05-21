@@ -128,6 +128,7 @@ $col-danger: #dc3545;
     align-items: center;
     margin-bottom: 40px;
     &-breadcrumb {
+      display: flex;
       span,
       a {
         display: inline-flex;
@@ -323,7 +324,6 @@ $col-danger: #dc3545;
       border-radius: 10px;
       .data-profile-container {
         display: flex;
-        align-items: center;
         img {
           width: 75px;
           height: 75px;
@@ -553,6 +553,12 @@ $col-danger: #dc3545;
     span {
       font-size: 13px;
     }
+  }
+  &-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   &-pagintaion {
     display: flex;

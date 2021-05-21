@@ -3,8 +3,10 @@ import Router, { useRouter } from "next/router";
 import { useState } from "react";
 import { Provider } from "react-redux";
 import { useStore } from "../services/store";
-import { Navbar, Sidebar, PageLoading } from "../components/layouts";
+import { Auth, Navbar, Sidebar, PageLoading } from "../components/layouts";
 import { AlertConfirm } from "../components/partials";
+// import { encrypt } from "../services/helpers";
+// import { getUserByKey } from "../services/api";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "flatpickr/dist/themes/airbnb.css";
 import "../scss/main.scss";
@@ -26,6 +28,15 @@ const App = ({ Component, pageProps }) => {
     setIsLoading(false);
   };
 
+  // useEffect(() => {
+  //   const encodedData = encrypt("anonim18cancer");
+  //   console.log(encodedData, "encodedData");
+
+  //   getUserByKey("email", "dicky.ech@gmail.com").then((response) => {
+  //     console.log(response, "response");
+  //   });
+  // }, []);
+
   return (
     <Provider store={store}>
       <Head>
@@ -33,6 +44,7 @@ const App = ({ Component, pageProps }) => {
         <meta name="HandheldFriendly" content="true" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
+      <Auth />
       <div className={`main ${route !== "/login" ? "main-line" : ""}`}>
         {route !== "/login" ? (
           <>
@@ -49,6 +61,11 @@ const App = ({ Component, pageProps }) => {
 
         <AlertConfirm />
       </div>
+      {route === "/login" && isLoading && (
+        <PageLoading
+          style={{ maxHeight: "unset", width: "100%", marginLeft: 0 }}
+        />
+      )}
     </Provider>
   );
 };

@@ -65,7 +65,7 @@ export const deleteEvent = (dataEvent) => {
       .remove()
       .then(() => {
         resolve(
-          fetchResponse(200, dataEvent, "Berhasil mengahpus data acara.")
+          fetchResponse(200, dataEvent, "Berhasil menghapus data acara.")
         );
       })
       .catch((error) => {

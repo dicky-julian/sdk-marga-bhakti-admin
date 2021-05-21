@@ -47,7 +47,13 @@ a {
   }
 }
 
-.col-form-label {
+.css-2b097c-container {
+  z-index: 99 !important;
+}
+
+.col-form-label,
+.css-1wa3eu0-placeholder,
+.css-1uccc91-singleValue {
   font-size: 14px !important;
 }
 
@@ -66,4 +72,21 @@ a {
 
 .flatpickr-input {
   background-color: #fff !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.custom {
+  &-badge {
+    font-size: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    &-primary {
+      background-image: linear-gradient(310deg, #ae99929c, #e2c99087),
+        url(https://demos.creative-tim.com/soft-ui-dashboard/assets/img/curved-images/white-curved.jpeg);
+      color: #fff;
+    }
+  }
 }

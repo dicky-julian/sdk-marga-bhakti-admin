@@ -1,16 +1,26 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { PageLoading } from "../components/layouts";
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Form,
+  FormGroup,
+  Col,
+  Button,
+} from "reactstrap";
 
 const headerImg =
   "https://images.pexels.com/photos/7919/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-const profileImg =
-  "https://www.cosmopolitan.co.id/newtest/vrgallery/teaser/rsz_75516654_447782205860059_220253201168768836_n_69_201910281157258ClnBX.jpg";
 
 const ProfilePage = () => {
   const state = useSelector((state) => state);
   const { dataSession } = state.auth;
   const { dataReference } = state.reference;
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   return (
     <div className="profile-page">
@@ -27,6 +37,12 @@ const ProfilePage = () => {
                   {dataSession.displayName}
                 </h6>
                 <small>{dataReference.role[dataSession.role]}</small>
+                <small
+                  className="d-block mt-2 text-primary cursor-pointer"
+                  onClick={() => setIsOpenModal(true)}
+                >
+                  Ubah Profile
+                </small>
               </div>
             </div>
             <div className="data-action-container">
@@ -55,6 +71,21 @@ const ProfilePage = () => {
       ) : (
         <PageLoading />
       )}
+
+      <Modal isOpen={isOpenModal} toggle={() => setIsOpenModal(!isOpenModal)}>
+        <ModalHeader toggle={() => setIsOpenModal(!isOpenModal)}>
+          Form Data Pengguna
+        </ModalHeader>
+        <Form>
+          <ModalBody></ModalBody>
+          <ModalFooter>
+            <Button size="sm">Kembali</Button>
+            <Button size="sm" color="dark">
+              Simpan
+            </Button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     </div>
   );
 };
