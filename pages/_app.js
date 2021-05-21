@@ -1,12 +1,10 @@
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { useStore } from "../services/store";
 import { Auth, Navbar, Sidebar, PageLoading } from "../components/layouts";
 import { AlertConfirm } from "../components/partials";
-// import { encrypt } from "../services/helpers";
-// import { getUserByKey } from "../services/api";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "flatpickr/dist/themes/airbnb.css";
 import "../scss/main.scss";
@@ -14,7 +12,7 @@ import "../scss/main.scss";
 const App = ({ Component, pageProps }) => {
   const [isLoading, setIsLoading] = useState(false);
   const store = useStore(pageProps.initialReduxState);
-  const { route } = useRouter();
+  const { route, push } = useRouter();
 
   Router.onRouteChangeStart = () => {
     setIsLoading(true);
@@ -28,14 +26,11 @@ const App = ({ Component, pageProps }) => {
     setIsLoading(false);
   };
 
-  // useEffect(() => {
-  //   const encodedData = encrypt("anonim18cancer");
-  //   console.log(encodedData, "encodedData");
-
-  //   getUserByKey("email", "dicky.ech@gmail.com").then((response) => {
-  //     console.log(response, "response");
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (route === "/") {
+      push("/layout");
+    }
+  });
 
   return (
     <Provider store={store}>
