@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { useStore } from "../services/store";
 import { Auth, Navbar, Sidebar, PageLoading } from "../components/layouts";
+import { validateSession } from "../redux/actions";
 import { AlertConfirm } from "../components/partials";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "flatpickr/dist/themes/airbnb.css";
@@ -11,6 +12,7 @@ import "../scss/main.scss";
 
 const App = ({ Component, pageProps }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isValidateLoading, setIsValidateLoading] = useState(false);
   const store = useStore(pageProps.initialReduxState);
   const { route, push } = useRouter();
 
@@ -26,11 +28,19 @@ const App = ({ Component, pageProps }) => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
+  const handleValidateSession = async () => {
+    setIsValidateLoading(true);
     if (route === "/") {
-      push("/layout");
+      await validateSession()
+        .then(() => push("/layout"))
+        .catch(() => push("/login"));
     }
-  });
+    setIsValidateLoading(false);
+  };
+
+  useEffect(() => {
+    handleValidateSession();
+  }, [route]);
 
   return (
     <Provider store={store}>
@@ -56,9 +66,14 @@ const App = ({ Component, pageProps }) => {
 
         <AlertConfirm />
       </div>
-      {route === "/login" && isLoading && (
+      {((route === "/login" && isLoading) || isValidateLoading) && (
         <PageLoading
-          style={{ maxHeight: "unset", width: "100%", marginLeft: 0 }}
+          style={{
+            maxHeight: "unset",
+            width: "100%",
+            marginLeft: 0,
+            zIndex: 1000,
+          }}
         />
       )}
     </Provider>

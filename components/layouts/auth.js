@@ -12,14 +12,21 @@ export const Auth = () => {
   // === VALIDATE USER'S SESSION ===
   const handleValidateSession = async () => {
     if (!dataSession) {
-      await validateSession().then((dataUser) => {
-        dispatch(setUserSession(dataUser));
-        if (route === "/login") push("/layout");
-      });
-    } else if (route === "/login") push("/layout");
+      await validateSession()
+        .then((dataUser) => {
+          dispatch(setUserSession(dataUser));
+          if (route === "/login") push("/layout");
+        })
+        .catch(() => {
+          push("/login");
+        });
+    } else if (route === "/login") {
+      push("/layout");
+    }
   };
 
   useEffect(() => {
+    console.log(dataSession, "dataSession");
     handleValidateSession();
   }, [dataSession]);
   return <></>;
