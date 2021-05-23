@@ -4,4 +4,5 @@ export const routeList = {
   artikel: "Artikel",
   info: "Info & Pengumuman",
   pegawai: "Data Pegawai",
+  prestasi: "Data Prestasi",
 };

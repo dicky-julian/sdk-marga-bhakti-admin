@@ -9,10 +9,10 @@ export const getEvent = () => {
     fireDatabase.ref(reference).on("value", (snapshot) => {
       const result = snapshot.val();
       if (result) {
-        resolve(fetchResponse(200, result, "Berhasil menerima data event."));
+        resolve(fetchResponse(200, result, "Berhasil menerima data acara."));
       }
 
-      reject(fetchResponse(404, null, "Data event tidak ditemukan."));
+      reject(fetchResponse(404, null, "Data acara tidak ditemukan."));
     });
   });
 };
@@ -27,11 +27,11 @@ export const postEvent = (dataEvent) => {
       .then(() => {
         if (reference_key) dataEvent.id = reference_key;
         resolve(
-          fetchResponse(200, dataEvent, "Berhasil menambahkan data acara")
+          fetchResponse(200, dataEvent, "Berhasil menambahkan data acara.")
         );
       })
       .catch((error) => {
-        reject(fetchResponse(400, error, "Gagal menambahkan data artikel."));
+        reject(fetchResponse(400, error, "Gagal menambahkan data acara."));
       });
   });
 };
@@ -69,7 +69,7 @@ export const deleteEvent = (dataEvent) => {
         );
       })
       .catch((error) => {
-        reject(400, error, "Gagal menghapus data acara.");
+        reject(fetchResponse((400, error, "Gagal menghapus data acara.")));
       });
   });
 };

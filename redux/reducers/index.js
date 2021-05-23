@@ -6,6 +6,7 @@ import articleReducer from "./article";
 import eventReducer from "./event";
 import infoReducer from "./info";
 import userReducer from "./user";
+import achievementReducer from "./achievement";
 
 export default combineReducers({
   reference: referenceReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   event: eventReducer,
   info: infoReducer,
   user: userReducer,
+  achievement: achievementReducer,
 });

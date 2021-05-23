@@ -26,7 +26,6 @@ export const Auth = () => {
   };
 
   useEffect(() => {
-    console.log(dataSession, "dataSession");
     handleValidateSession();
   }, [dataSession]);
   return <></>;

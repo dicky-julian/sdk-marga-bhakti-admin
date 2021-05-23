@@ -173,9 +173,9 @@ const InfoPage = () => {
                     className="form-control"
                     onChange={handleChange}
                     name="description"
+                    value={{dataPayload.description || ""}}
                     required
                   >
-                    {dataPayload.description || ""}
                   </textarea>
                 </Col>
               </FormGroup>

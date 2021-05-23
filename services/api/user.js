@@ -25,7 +25,6 @@ export const getUserByKey = (key, value) => {
       .equalTo(value)
       .on("value", (snapshot) => {
         const result = snapshot.val();
-        console.log(result, "result");
         resolve(
           fetchResponse(200, result, "Berhasil mendapatkan data pengguna")
         );

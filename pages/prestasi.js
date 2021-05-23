@@ -7,33 +7,38 @@ import {
   ModalFooter,
   Form,
   FormGroup,
-  Label,
-  Input,
-  Button,
   Col,
+  Input,
+  CustomInput,
+  Label,
+  Button,
   Spinner,
 } from "reactstrap";
 import { Table } from "../components/partials/tables";
 import { PageLoading } from "../components/layouts";
 import {
-  getDataEvent,
-  postDataEvent,
-  putDataEvent,
-  deleteDataEvent,
+  getDataAchievement,
+  postDataAchievement,
+  putDataAchievement,
+  deleteDataAchievement,
   setDataAlertConfirm,
 } from "../redux/actions";
-import DatePicker from "react-flatpickr";
 import moment from "moment";
 
-const AcaraPage = () => {
+const PrestasiPage = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const { dataAchievement } = state.achievement;
 
   const [isLoading, setIsLoading] = useState(false);
   const [dataModal, setDataModal] = useState(null);
   const [dataPayload, setDataPayload] = useState({});
 
-  const { dataEvent } = state.event;
+  useEffect(() => {
+    if (!dataAchievement) {
+      dispatch(getDataAchievement());
+    }
+  }, []);
 
   const dataField = [
     {
@@ -41,43 +46,23 @@ const AcaraPage = () => {
       field: "title",
     },
     {
-      title: "PIC",
-      field: "pic",
+      title: "Deskripsi",
+      field: "description",
+      style: {
+        minWidth: 300,
+      },
     },
     {
-      title: "Peserta",
-      field: "participant",
-    },
-    {
-      title: "Tanggal Acara",
-      field: "time",
+      title: "Penulis",
+      field: "created_by",
     },
     {
       title: "Tanggal Dibuat",
       field: "created_at",
     },
-    {
-      title: "Banyak Dilihat",
-      field: "visitor",
-    },
   ];
 
-  // === OPEN MODAL POST EVENT ===
-  const openModal = (data = null, label) => {
-    setDataModal({
-      data,
-      label,
-    });
-    setDataPayload(data || {});
-  };
-
-  // === CLOSE MODAL POST EVENT ===
-  const closeModal = () => {
-    setDataModal(null);
-    setDataPayload({});
-  };
-
-  // === HANDLE CHANGE MODAL POST DATA EVENT ===
+  // === HANDLE CHANGE MODAL POST DATA ACHIEVEMENT ===
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
     const payload = { ...dataPayload };
@@ -91,30 +76,24 @@ const AcaraPage = () => {
     setDataPayload(payload);
   };
 
-  // === HANDLE CHANGE TIME MODAL POST DATA EVENT ===
-  const handleChangeTime = async (name, value) => {
-    const payload = { ...dataPayload };
-    payload[name] = value;
-
-    setDataPayload(payload);
-  };
-
-  // === MODAL POST EVENT SUBMISSION ===
+  // === MODAL POST ARTICLE SUBMISSION ===
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
     const payload = {
       ...dataPayload,
-      author: "Dicky Julian Pratama",
-      visitor: 0,
+      created_by: "Dicky Julian Pratama",
     };
+
     if (!payload.created_at) payload.created_at = moment().format("DD-MM-YYYY");
 
+    console.log(dataModal, "datModal");
+    console.log(payload, "payload");
     if (dataModal.data) {
-      await dispatch(putDataEvent(payload, dataModal));
+      await dispatch(putDataAchievement(payload, dataModal));
     } else {
-      await dispatch(postDataEvent(payload));
+      await dispatch(postDataAchievement(payload));
     }
 
     setIsLoading(false);
@@ -122,16 +101,16 @@ const AcaraPage = () => {
     setDataPayload({});
   };
 
-  // === DELETE DATA EVENT ===
+  // === DELETE DATA ACHIEVEMENT ===
   const handleDelete = async (dataIndex) => {
     dispatch(
       setDataAlertConfirm({
         type: "question",
         title: "Apakah Anda yakin?",
-        description: "Data yang dihapus tidak dapat dimuat kembali.",
+        description: "Data yang dihapus tidak dimuat kembali.",
         onApprove: () =>
           dispatch(
-            deleteDataEvent(dataEvent[dataIndex], {
+            deleteDataAchievement(dataAchievement[dataIndex], {
               label: dataIndex,
             })
           ),
@@ -139,39 +118,48 @@ const AcaraPage = () => {
     );
   };
 
+  const openModal = (data = null, label) => {
+    setDataModal({
+      data,
+      label,
+    });
+    setDataPayload(data || {});
+  };
+
+  const closeModal = () => {
+    setDataModal(null);
+    setDataPayload({});
+  };
+
   const actionReferences = {
     add: openModal,
-    edit: (data, label) => openModal(data, label),
+    edit: (data, label) => {
+      openModal(data, label);
+    },
     delete: (dataIndex) => handleDelete(dataIndex),
   };
 
-  useEffect(() => {
-    if (!dataEvent) {
-      dispatch(getDataEvent());
-    }
-  }, []);
-
   return (
     <>
-      {dataEvent ? (
-        <div className="event-page">
+      {dataAchievement ? (
+        <div className="achievement-page">
           <Table
-            title="Data Kegiatan"
-            data={dataEvent}
+            title="Data Prestasi"
+            data={dataAchievement}
             dataField={dataField}
             action={actionReferences}
-          ></Table>
+          />
         </div>
       ) : (
         <PageLoading />
       )}
 
       <Modal isOpen={Boolean(dataModal)}>
+        <ModalHeader toggle={closeModal}>Form Data Prestasi</ModalHeader>
         {dataModal && (
           <Form onSubmit={handleSubmit}>
-            <ModalHeader toggle={closeModal}>Form Data Acara</ModalHeader>
             <ModalBody>
-              <FormGroup row className="mb-4">
+              <FormGroup row>
                 <Label md={4}>Judul</Label>
                 <Col md={8}>
                   <Input
@@ -182,53 +170,40 @@ const AcaraPage = () => {
                   />
                 </Col>
               </FormGroup>
-              <FormGroup row className="mb-4">
+
+              <FormGroup row>
                 <Label md={4}>Deskripsi</Label>
                 <Col md={8}>
                   <textarea
                     rows={5}
                     className="form-control"
                     onChange={handleChange}
-                    name="description"
                     value={dataPayload.description || ""}
+                    name="description"
                     required
                   ></textarea>
                 </Col>
               </FormGroup>
-              <FormGroup row className="mb-4">
-                <Label md={4}>PIC</Label>
+
+              <FormGroup row>
+                <Label md={4}>Judul</Label>
                 <Col md={8}>
-                  <Input
-                    value={dataPayload.pic || ""}
+                  <CustomInput
+                    id="achievement-custominput"
                     onChange={handleChange}
-                    name="pic"
-                    required
+                    name="image"
+                    type="file"
+                    required={!Boolean(dataModal.data)}
                   />
-                </Col>
-              </FormGroup>
-              <FormGroup row className="mb-4">
-                <Label md={4}>Peserta</Label>
-                <Col md={8}>
-                  <Input
-                    value={dataPayload.participant || ""}
-                    onChange={handleChange}
-                    name="participant"
-                    required
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup row className="mb-4">
-                <Label md={4}>Waktu Acara</Label>
-                <Col md={8}>
-                  <DatePicker
-                    value={dataPayload.time || null}
-                    className="form-control"
-                    onChange={(time, date) => handleChangeTime("time", date)}
-                    options={{
-                      enableTime: true,
-                      dateFormat: "d-m-Y H:i",
-                    }}
-                  />
+                  {typeof dataPayload.image === "string" && (
+                    <a
+                      target="_blank"
+                      href={dataPayload.image}
+                      className="text-primary"
+                    >
+                      <small>Lihat Gambar</small>
+                    </a>
+                  )}
                 </Col>
               </FormGroup>
             </ModalBody>
@@ -236,7 +211,7 @@ const AcaraPage = () => {
               <Button size="sm" onClick={closeModal}>
                 Kembali
               </Button>
-              <Button size="sm" color="dark" type="submit" disabled={isLoading}>
+              <Button size="sm" color="dark" type="submit">
                 {isLoading ? <Spinner size="sm" color="light" /> : "Simpan"}
               </Button>
             </ModalFooter>
@@ -247,4 +222,4 @@ const AcaraPage = () => {
   );
 };
 
-export default AcaraPage;
+export default PrestasiPage;

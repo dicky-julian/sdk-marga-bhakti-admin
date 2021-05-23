@@ -145,7 +145,9 @@ const PegawaiPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getDataUser());
+    if (!dataUser) {
+      dispatch(getDataUser());
+    }
   }, []);
 
   useEffect(() => {

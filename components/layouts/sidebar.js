@@ -91,6 +91,19 @@ const Sidebar = () => {
             </div>
           </Link>
 
+          <Link href="/prestasi">
+            <div
+              className={`sidebar-link ${
+                route === "/prestasi" ? "active" : ""
+              }`}
+            >
+              <div className="icon-bar mr-3">
+                <i className="fas fa-trophy"></i>
+              </div>
+              <span className="link-bar">Data Prestasi</span>
+            </div>
+          </Link>
+
           <Link href="/pegawai">
             <div
               className={`sidebar-link ${route === "/pegawai" ? "active" : ""}`}
