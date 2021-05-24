@@ -109,7 +109,8 @@ const AcaraPage = () => {
       author: "Dicky Julian Pratama",
       visitor: 0,
     };
-    if (!payload.created_at) payload.created_at = moment().format("DD-MM-YYYY");
+    if (!payload.created_at)
+      payload.created_at = moment().format("YYYY-MM-DD hh:mm:ss");
 
     if (dataModal.data) {
       await dispatch(putDataEvent(payload, dataModal));
@@ -226,7 +227,7 @@ const AcaraPage = () => {
                     onChange={(time, date) => handleChangeTime("time", date)}
                     options={{
                       enableTime: true,
-                      dateFormat: "d-m-Y H:i",
+                      dateFormat: "Y-m-d H:i:S",
                     }}
                   />
                 </Col>

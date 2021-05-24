@@ -92,7 +92,8 @@ const InfoPage = () => {
       author: "Dicky Julian Pratama",
       visitor: 0,
     };
-    if (!payload.created_at) payload.created_at = moment().format("DD-MM-YYYY");
+    if (!payload.created_at)
+      payload.created_at = moment().format("YYYY-MM-DD hh:mm:ss");
 
     if (dataModal.data) {
       await dispatch(putDataInfo(payload, dataModal));
@@ -173,10 +174,9 @@ const InfoPage = () => {
                     className="form-control"
                     onChange={handleChange}
                     name="description"
-                    value={{dataPayload.description || ""}}
+                    value={dataPayload.description || ""}
                     required
-                  >
-                  </textarea>
+                  ></textarea>
                 </Col>
               </FormGroup>
             </ModalBody>

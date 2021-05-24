@@ -86,10 +86,9 @@ const PrestasiPage = () => {
       created_by: "Dicky Julian Pratama",
     };
 
-    if (!payload.created_at) payload.created_at = moment().format("DD-MM-YYYY");
+    if (!payload.created_at)
+      payload.created_at = moment().format("YYYY-MM-DD hh:mm:ss");
 
-    console.log(dataModal, "datModal");
-    console.log(payload, "payload");
     if (dataModal.data) {
       await dispatch(putDataAchievement(payload, dataModal));
     } else {

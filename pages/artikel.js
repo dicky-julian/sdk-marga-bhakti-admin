@@ -39,6 +39,7 @@ const ArtikelPage = () => {
   const [dataContent, setDataContent] = useState("");
 
   const { dataArticle } = state.article;
+  const { dataSession } = state.auth;
   const dataField = [
     {
       title: "Judul",
@@ -95,11 +96,13 @@ const ArtikelPage = () => {
 
     const payload = {
       ...dataPayload,
-      author: "Dicky Julian Pratama",
+      author: dataSession.displayName,
+      author_id: dataSession.uid,
       description: dataContent,
       visitor: 0,
     };
-    if (!payload.created_at) payload.created_at = moment().format("DD-MM-YYYY");
+    if (!payload.created_at)
+      payload.created_at = moment().format("YYYY-MM-DD hh:mm:ss");
 
     if (dataModal.data) {
       await dispatch(putDataArticle(payload, dataModal));

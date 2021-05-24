@@ -24,11 +24,10 @@ export const getDataAchievement = () => async (dispatch) => {
         id: achievementId,
         ...data[achievementId],
       }));
-      console.log(dataAchievement, "data");
       dispatch(setDataAchievement(dataAchievement || []));
     });
   } catch (error) {
-    dispatch(setDataAlertConfirm([]));
+    dispatch(setDataAchievement([]));
   }
 };
 
