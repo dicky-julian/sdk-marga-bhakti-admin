@@ -21,7 +21,7 @@ export const getLayout = () => {
 // === POST LAYOUT HEADER ===
 export const postLayoutHeader = (dataLayout, label) => {
   return new Promise(async (resolve, reject) => {
-    await compressImg(dataLayout.image).then((imageFile) => {
+    await compressImg(dataLayout.image, 1500, 1500).then((imageFile) => {
       dataLayout.image = imageFile;
     });
     // === #1 SAVE HEADER'S IMAGE TO STORAGE ===
@@ -62,7 +62,7 @@ export const putLayoutHeader = (dataLayout, dataLayoutOld, label) => {
   return new Promise(async (resolve, reject) => {
     // === #1 IF USER PUT HEADER'S IMAGE, SAVE NEW HEADER'S IMAGE TO STORAGE ===
     if (typeof dataLayout.image === "object") {
-      await compressImg(dataLayout.image).then((imageFile) => {
+      await compressImg(dataLayout.image, 1500, 1500).then((imageFile) => {
         dataLayout.image = imageFile;
       });
       await postStorage(
