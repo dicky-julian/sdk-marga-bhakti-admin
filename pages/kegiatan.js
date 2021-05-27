@@ -34,6 +34,7 @@ const AcaraPage = () => {
   const [dataPayload, setDataPayload] = useState({});
 
   const { dataEvent } = state.event;
+  const { dataSession } = state.auth;
 
   const dataField = [
     {
@@ -106,7 +107,8 @@ const AcaraPage = () => {
 
     const payload = {
       ...dataPayload,
-      author: "Dicky Julian Pratama",
+      author: dataSession.displayName,
+      author_id: dataSession.uid,
       visitor: 0,
     };
     if (!payload.created_at)
@@ -229,6 +231,17 @@ const AcaraPage = () => {
                       enableTime: true,
                       dateFormat: "Y-m-d H:i:S",
                     }}
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row className="mb-4">
+                <Label md={4}>Tempat Acara</Label>
+                <Col md={8}>
+                  <Input
+                    value={dataPayload.location || ""}
+                    onChange={handleChange}
+                    name="location"
+                    required
                   />
                 </Col>
               </FormGroup>

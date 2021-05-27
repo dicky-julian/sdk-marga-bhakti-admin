@@ -5,7 +5,7 @@ import {
   getLocalStorage,
   encrypt,
 } from "../../services/helpers";
-import { getUserByKey } from "../../services/api";
+import { getUserByKey, putUser } from "../../services/api";
 import { SET_DATA_SESSION } from "../actionTypes";
 
 // === SET USER SESSION ===
@@ -96,3 +96,43 @@ export const validateSession = () => {
     reject();
   });
 };
+
+// === PUT USER SESSION ===
+export const updateUserSession =
+  (dataPayload, dataUserOld) => async (dispatch) => {
+    try {
+      const newDataPayload = { ...dataPayload };
+
+      // === ADJUST DATA PAYLOAD ===
+      if (newDataPayload.iat) delete newDataPayload.iat;
+      if (typeof newDataPayload.isRemember === "boolean")
+        delete newDataPayload.isRemember;
+      if (typeof newDataPayload.uid) {
+        newDataPayload.id = newDataPayload.uid;
+        delete newDataPayload.uid;
+      }
+
+      await putUser(newDataPayload, dataUserOld).then((response) => {
+        console.log(response, "response");
+        setLocalStorage("access_sdk", response.data);
+        dispatch(setUserSession(response.data));
+        dispatch(
+          setDataAlertConfirm({
+            type: "success",
+            title: "Berhasil!",
+            description: response.message,
+            declineDisable: true,
+          })
+        );
+      });
+    } catch (error) {
+      dispatch(
+        setDataAlertConfirm({
+          type: "error",
+          title: "Gagal!",
+          description: `wakacau ${error.message}`,
+          declineDisable: true,
+        })
+      );
+    }
+  };

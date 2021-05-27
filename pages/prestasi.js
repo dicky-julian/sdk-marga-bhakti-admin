@@ -29,6 +29,7 @@ const PrestasiPage = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { dataAchievement } = state.achievement;
+  const { dataSession } = state.auth;
 
   const [isLoading, setIsLoading] = useState(false);
   const [dataModal, setDataModal] = useState(null);
@@ -83,7 +84,7 @@ const PrestasiPage = () => {
 
     const payload = {
       ...dataPayload,
-      created_by: "Dicky Julian Pratama",
+      created_by: dataSession.displayName,
     };
 
     if (!payload.created_at)

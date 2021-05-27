@@ -32,6 +32,7 @@ const PegawaiPage = () => {
   const state = useSelector((state) => state);
   const { dataUser } = state.user;
   const { dataReference } = state.reference;
+  const { dataSession } = state.auth;
 
   const [isLoading, setIsLoading] = useState(false);
   const [dataModal, setDataModal] = useState(null);
@@ -103,10 +104,11 @@ const PegawaiPage = () => {
 
     const payload = {
       ...dataPayload,
-      created_by: "Dicky Julian Pratama",
+      created_by: dataSession.displayName,
     };
 
-    if (!payload.created_at) payload.created_at = moment().format("DD-MM-YYYY");
+    if (!payload.created_at)
+      payload.created_at = moment().format("YYYY-MM-DD hh:mm:ss");
     if (payload.password) payload.password = encrypt(payload.password);
 
     if (dataModal.data) {

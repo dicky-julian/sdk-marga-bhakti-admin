@@ -68,7 +68,7 @@ export const postUser = (dataUser) => {
 // === PUT DATA USER ===
 export const putUser = (dataUser, dataUserOld) => {
   return new Promise(async (resolve, reject) => {
-    // === #1 IF PUT USER'S IMAGE, SAVE USER'S IMAGE TO STORAGE ===
+    // === #1 IF USER PUT IMAGE, SAVE USER'S IMAGE TO STORAGE ===
     if (typeof dataUser.photoURL === "object") {
       await compressImg(dataUser.photoURL).then(async (imageFile) => {
         await postStorage(

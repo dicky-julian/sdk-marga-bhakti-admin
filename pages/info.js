@@ -33,6 +33,7 @@ const InfoPage = () => {
   const [dataPayload, setDataPayload] = useState({});
 
   const { dataInfo } = state.info;
+  const { dataSession } = state.auth;
 
   const dataField = [
     {
@@ -89,7 +90,8 @@ const InfoPage = () => {
 
     const payload = {
       ...dataPayload,
-      author: "Dicky Julian Pratama",
+      author: dataSession.displayName,
+      author_id: dataSession.uid,
       visitor: 0,
     };
     if (!payload.created_at)
