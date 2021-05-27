@@ -45,9 +45,19 @@ const App = ({ Component, pageProps }) => {
   return (
     <Provider store={store}>
       <Head>
-        <title>SDK Marga Bhakti</title>
+        <title>Admin SDK Marga Bhakti</title>
         <meta name="HandheldFriendly" content="true" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="Yayasan Karmel adalah lembaga sosial dan pendidikan. Lembaga ini didirikan di atas pondasi kepedulian dan semangat keberpihakan terhadap masa depan dan nasib hidup kaum miskin dan tertindas, terlebih mereka yang tinggal di pelosok-pelosok desa. Untuk itu, secara jelas Yayasan Karmel menegaskan dirinya sebagai lembaga sosial dan pendidikan yang dinaungi oleh Keuskupan Malang. Dalam bidang sosial, Yayasan Karmel secara khusus mengelola panti asuhan."
+        />
+        <meta name="keywords" content="sdk, marga" />
+        <meta name="author" content="John Doe" />
+        <meta
+          itemProp="image"
+          content="https://yayasankarmel.or.id/wp-content/uploads/2019/03/yayasan-pendidikan-karmel-logo.png"
+        />
       </Head>
       <Auth />
       <div className={`main ${route !== "/login" ? "main-line" : ""}`}>
