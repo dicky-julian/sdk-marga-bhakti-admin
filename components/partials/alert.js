@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, ModalBody, Button } from "reactstrap";
 import { setDataAlertConfirm } from "../../redux/actions";

@@ -24,7 +24,10 @@ export const getDataArticle = () => async (dispatch) => {
         id: articleId,
         ...data[articleId],
       }));
-      dispatch(setDataArticle(dataArticle || []));
+      const sortedDataArticle = dataArticle.sort(
+        (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
+      );
+      dispatch(setDataArticle(sortedDataArticle || []));
     });
   } catch (error) {
     dispatch(setDataArticle([]));

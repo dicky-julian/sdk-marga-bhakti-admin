@@ -19,7 +19,10 @@ export const getDataEvent = () => async (dispatch) => {
         id: eventId,
         ...data[eventId],
       }));
-      dispatch(setDataEvent(dataEvent));
+      const newDataEvent = dataEvent.sort(
+        (a, b) => Date.parse(b.time) - Date.parse(a.time)
+      );
+      dispatch(setDataEvent(newDataEvent || []));
     });
   } catch (error) {
     dispatch(setDataEvent([]));

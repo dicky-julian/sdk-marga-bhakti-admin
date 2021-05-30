@@ -19,7 +19,10 @@ export const getDataInfo = () => async (dispatch) => {
         id: infoId,
         ...data[infoId],
       }));
-      dispatch(setDataInfo(dataInfo));
+      const sortedDataArticle = dataInfo.sort(
+        (a, b) => Date.parse(b.created_at) - Date.parse(a.created_at)
+      );
+      dispatch(setDataInfo(sortedDataArticle || []));
     });
   } catch (error) {
     dispatch(setDataInfo([]));

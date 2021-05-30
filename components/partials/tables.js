@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "reactstrap";
+import moment from "moment";
 
 const Table = (props) => {
   const { title, data, dataField, action } = props;
@@ -123,6 +124,8 @@ const Table = (props) => {
                           <span className="custom-badge custom-badge-primary">
                             {option[dataTable[field]]}
                           </span>
+                        ) : field === "time" || field === "created_at" ? (
+                          moment(dataTable[field]).format("DD MMM YYYY hh:mm")
                         ) : (
                           dataTable[field]
                         )}
