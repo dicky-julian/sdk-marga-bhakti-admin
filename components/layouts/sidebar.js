@@ -141,7 +141,7 @@ const Sidebar = () => {
         </div>
         <h6 className="font-weight-bold mt-3">Informasi Keamanan!</h6>
         <small>
-          Semua aktivitas pada halaman ini terekam ke dalam database.
+          Semua aktivitas pada halaman ini akan disimpan ke dalam database.
         </small>
         <Button color="light">Lihat Aktivitas</Button>
       </div>
